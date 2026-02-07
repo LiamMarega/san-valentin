@@ -38,6 +38,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7123506609054772"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={`${inter.variable} ${playfair.variable} ${caveat.variable} font-sans antialiased`}>
         {children}
       </body>
