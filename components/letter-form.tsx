@@ -13,11 +13,20 @@ export function LetterForm() {
   const [isScheduled, setIsScheduled] = useState(false)
   const [userTimezone, setUserTimezone] = useState("")
 
+  // Pregunta personalizada: cuando el select es "custom" se muestra el input
+  const [messageType, setMessageType] = useState("")
+  const CUSTOM_VALUE = "__custom__"
+
   // Detectar zona horaria al cargar
   useEffect(() => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
     setUserTimezone(tz)
   }, [])
+
+  function capitalizeFirstLetter(value: string): string {
+    if (!value) return value
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -25,12 +34,23 @@ export function LetterForm() {
     setError("")
 
     const formData = new FormData(e.currentTarget)
-    
+    const selectedType = formData.get("message_type") as string
+    const message_type =
+      selectedType === CUSTOM_VALUE
+        ? (formData.get("message_type_custom") as string)?.trim() || ""
+        : selectedType
+
+    if (!message_type) {
+      setError("Escribí tu pregunta personalizada.")
+      setIsSubmitting(false)
+      return
+    }
+
     const data: any = {
       sender_name: formData.get("sender_name") as string,
       receiver_name: formData.get("receiver_name") as string,
       receiver_email: formData.get("receiver_email") as string,
-      message_type: formData.get("message_type") as string,
+      message_type,
       timezone: userTimezone, // Enviamos la zona horaria
     }
 
@@ -89,6 +109,9 @@ export function LetterForm() {
           required
           placeholder="¿Quién envía la carta?"
           className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+          onInput={(e) => {
+            e.currentTarget.value = capitalizeFirstLetter(e.currentTarget.value)
+          }}
         />
       </div>
 
@@ -105,6 +128,9 @@ export function LetterForm() {
           required
           placeholder="¿Para quién es?"
           className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+          onInput={(e) => {
+            e.currentTarget.value = capitalizeFirstLetter(e.currentTarget.value)
+          }}
         />
       </div>
 
@@ -134,12 +160,25 @@ export function LetterForm() {
           id="message_type"
           name="message_type"
           required
+          value={messageType}
+          onChange={(e) => setMessageType(e.target.value)}
           className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all appearance-none"
         >
+          <option value="">Elegí una opción...</option>
           <option value="Queres ser mi San Valentin?">{"¿Querés ser mi San Valentín?"}</option>
           <option value="Queres ser mi novia?">{"¿Querés ser mi novia?"}</option>
           <option value="Tengo algo importante que preguntarte...">{"Tengo algo importante que preguntarte..."}</option>
+          <option value={CUSTOM_VALUE}>Pregunta personalizada...</option>
         </select>
+        {messageType === CUSTOM_VALUE && (
+          <input
+            type="text"
+            name="message_type_custom"
+            placeholder="Escribí tu pregunta..."
+            required
+            className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all mt-1"
+          />
+        )}
       </div>
 
       {/* Scheduling Option */}

@@ -96,6 +96,14 @@ export default async function SentPage({ searchParams }: SentPageProps) {
           <p className="text-sm text-muted-foreground">
             Hecho con amor para San Valentin
           </p>
+          <a
+            href="https://www.instagram.com/liammdev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-block text-sm font-medium text-pink-500 hover:text-pink-600 underline underline-offset-2 transition-colors"
+          >
+            Desarrollado por @LiammDev
+          </a>
         </footer>
       </div>
     </main>

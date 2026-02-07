@@ -87,6 +87,14 @@ export default async function CartaPage({ params }: { params: Promise<{ id: stri
           <p className="text-sm text-muted-foreground">
             Hecho con amor para San Valentin
           </p>
+          <a
+            href="https://www.instagram.com/liammdev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-block text-sm font-medium text-pink-500 hover:text-pink-600 underline underline-offset-2 transition-colors"
+          >
+            Desarrollado por @LiammDev
+          </a>
         </footer>
       </div>
     </main>
