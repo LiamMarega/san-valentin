@@ -20,6 +20,7 @@ import { THEMES, RELATIONSHIP_OPTIONS, getThemeById, isThemeLocked } from "@/con
 import type { ThemeId, RelationshipType } from "@/constants/themes"
 import { LetterPreview } from "@/components/letter-preview"
 import { cn } from "@/lib/utils"
+import { getPaddle } from "@/components/paddle-loader"
 
 // =============================================================================
 // Theme Selector Card
@@ -38,15 +39,13 @@ function ThemeCard({
   return (
     <button
       type="button"
-      onClick={() => {
-        if (!locked) onSelect()
-      }}
+      onClick={() => onSelect()}
       className={cn(
         "relative flex flex-col items-center gap-2 rounded-xl border-2 p-3 transition-all text-left w-full",
         isSelected
           ? "border-primary bg-primary/5 shadow-md ring-2 ring-primary/20"
           : "border-border hover:border-primary/30 bg-card",
-        locked && "opacity-60 cursor-not-allowed"
+        locked && !isSelected && "opacity-60"
       )}
     >
       {/* Color swatch */}
@@ -118,6 +117,28 @@ export function LetterForm() {
     return value.charAt(0).toUpperCase() + value.slice(1)
   }
 
+  function openPaddleCheckout(letterId: string, email: string) {
+    const paddle = getPaddle()
+    if (!paddle) {
+      setError("Error al cargar el sistema de pagos. Recargá la página.")
+      setIsSubmitting(false)
+      return
+    }
+
+    paddle.Checkout.open({
+      items: [{ priceId: process.env.NEXT_PUBLIC_PADDLE_PRICE_ID!, quantity: 1 }],
+      customer: { email },
+      customData: { letterId },
+      settings: {
+        displayMode: "overlay",
+        successUrl: `${window.location.origin}/sent`,
+      },
+    })
+
+    // Paddle overlay maneja su propio estado, liberamos el botón
+    setIsSubmitting(false)
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSubmitting(true)
@@ -136,10 +157,12 @@ export function LetterForm() {
       return
     }
 
+    const receiverEmail = formData.get("receiver_email") as string
+
     const data: Record<string, unknown> = {
       sender_name: formData.get("sender_name") as string,
       receiver_name: formData.get("receiver_name") as string,
-      receiver_email: formData.get("receiver_email") as string,
+      receiver_email: receiverEmail,
       message_type,
       timezone: userTimezone,
       theme: selectedTheme,
@@ -169,6 +192,15 @@ export function LetterForm() {
 
       if (!res.ok) throw new Error("Error al enviar la carta")
 
+      const { letterId, isPremium } = await res.json()
+
+      // Si es premium -> abrir Paddle Checkout overlay
+      if (isPremium) {
+        openPaddleCheckout(letterId, receiverEmail)
+        return
+      }
+
+      // Flujo gratis -> redirigir directamente
       if (isScheduled) {
         const date = formData.get("scheduled_date") as string
         const time = formData.get("scheduled_time") as string
@@ -418,6 +450,8 @@ export function LetterForm() {
                 <span className="animate-spin inline-block w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full" />
                 Guardando...
               </>
+            ) : isThemeLocked(selectedTheme) ? (
+              "Pagar $1 USD y Enviar"
             ) : isScheduled ? (
               "Programar Carta"
             ) : (
