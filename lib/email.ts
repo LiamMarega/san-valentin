@@ -86,14 +86,9 @@ export async function sendLetterEmail({
           
           <tr>
             <td style="background-color: #fff0f5; padding: 24px 32px; text-align: center; border-top: 1px solid #fce7f3;">
-              <p style="color: #9d174d; font-size: 13px; margin: 0 0 8px 0; font-weight: 500;">
-                Hecho con 💖 para este 14 de Febrero
-              </p>
-              <p style="color: #be185d; font-size: 12px; margin: 0;">
-                Desarrollado con amor por 
-                <a href="https://www.instagram.com/liammdev/" target="_blank" style="color: #be185d; text-decoration: none; font-weight: 700; border-bottom: 1px dashed #be185d;">
-                  @LiammDev
-                </a>
+              <p style="color: #9d174d; font-size: 13px; margin: 0;">
+                Hecho con 💖 para este 14 de Febrero por
+                <a href="https://www.instagram.com/liammdev/" target="_blank" style="color: #be185d; text-decoration: none; font-weight: 700; border-bottom: 1px dashed #be185d;">@LiammDev</a>
               </p>
             </td>
           </tr>

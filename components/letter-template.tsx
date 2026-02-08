@@ -393,8 +393,9 @@ function MidnightTemplate({
 
       {/* Footer */}
       <div className="text-center py-4 border-t border-white/5 bg-black/20">
-        <p className="text-xs text-white/40 tracking-wider flex items-center justify-center gap-1">
-          HECHO CON <Heart className="w-3 h-3 text-[#FF007F] animate-pulse" fill="currentColor" /> BAJO LA LUNA
+        <p className="text-xs text-white/40 tracking-wider flex flex-wrap items-center justify-center gap-1">
+          HECHO CON <Heart className="w-3 h-3 text-[#FF007F] animate-pulse" fill="currentColor" /> BAJO LA LUNA POR{" "}
+          <a href="https://www.instagram.com/liammdev/" target="_blank" rel="noopener noreferrer" className="font-medium text-white/60 hover:text-[#FF007F] hover:underline">@LiammDev</a>
         </p>
       </div>
     </div>
@@ -533,8 +534,9 @@ function ScrapbookTemplate({
 
         {/* Footer */}
         <div className="text-center mt-6 pt-4 border-t border-[#FFB7C5]/30">
-          <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
-            Hecho con <Heart className="w-3 h-3 text-[#FFB7C5] animate-pulse" fill="currentColor" /> para San Valentín
+          <p className="text-xs text-gray-400 flex flex-wrap items-center justify-center gap-1">
+            Hecho con <Heart className="w-3 h-3 text-[#FFB7C5] animate-pulse" fill="currentColor" /> para San Valentín por{" "}
+            <a href="https://www.instagram.com/liammdev/" target="_blank" rel="noopener noreferrer" className="font-medium text-gray-500 hover:text-[#FFB7C5] hover:underline">@LiammDev</a>
           </p>
           {/* Rainbow bar */}
           <div className="h-1 mt-3 bg-gradient-to-r from-[#FFB7C5] via-[#FDFD96] to-[#AEC6CF] rounded-full" />

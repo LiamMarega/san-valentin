@@ -94,16 +94,16 @@ export default async function SentPage({ searchParams }: SentPageProps) {
         {/* Footer */}
         <footer className="text-center mt-8">
           <p className="text-sm text-muted-foreground">
-            Hecho con amor para San Valentin
+            Hecho con amor para San Valentín por{" "}
+            <a
+              href="https://www.instagram.com/liammdev/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-pink-500 hover:text-pink-600 hover:underline underline-offset-2 transition-colors"
+            >
+              @LiammDev
+            </a>
           </p>
-          <a
-            href="https://www.instagram.com/liammdev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 inline-block text-sm font-medium text-pink-500 hover:text-pink-600 underline underline-offset-2 transition-colors"
-          >
-            Desarrollado por @LiammDev
-          </a>
         </footer>
       </div>
     </main>
