@@ -105,8 +105,11 @@ export async function sendLetterEmail({
 </body>
 </html>`
 
+  const fromAddress =
+    process.env.RESEND_FROM || "Carta Secreta <onboarding@resend.dev>"
+
   const { data, error } = await resend.emails.send({
-    from: "Carta Secreta <onboarding@resend.dev>", // Personaliza esto si tienes dominio propio
+    from: fromAddress,
     to,
     subject: `💌 ${senderName} te escribió una carta sorpresa`,
     html: htmlContent,
