@@ -193,27 +193,6 @@ export function LetterForm() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* ====== LEFT COLUMN: Form ====== */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
-          {/* ── Theme Selector ── */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <Palette className="w-4 h-4 text-primary" />
-              Estilo de Carta
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {THEMES.map((theme) => (
-                <ThemeCard
-                  key={theme.id}
-                  theme={theme}
-                  isSelected={selectedTheme === theme.id}
-                  onSelect={() => setSelectedTheme(theme.id)}
-                />
-              ))}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {getThemeById(selectedTheme).description}
-            </p>
-          </div>
-
           {/* ── Relationship Type ── */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
@@ -399,6 +378,27 @@ export function LetterForm() {
                 </motion.div>
               )}
             </AnimatePresence>
+          </div>
+
+          {/* ── Theme Selector ── */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+              <Palette className="w-4 h-4 text-primary" />
+              Estilo de Carta
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {THEMES.map((theme) => (
+                <ThemeCard
+                  key={theme.id}
+                  theme={theme}
+                  isSelected={selectedTheme === theme.id}
+                  onSelect={() => setSelectedTheme(theme.id)}
+                />
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {getThemeById(selectedTheme).description}
+            </p>
           </div>
 
           {error && (
