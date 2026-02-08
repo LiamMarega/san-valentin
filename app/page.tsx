@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { LetterForm } from "@/components/letter-form"
 import { FloralTopLeft, FloralBottomRight, FloralSmall } from "@/components/floral-decorations"
 import { Heart } from "lucide-react"
@@ -57,6 +58,10 @@ export default function Home() {
             >
               @LiammDev
             </a>
+            {" · "}
+            <Link href="/terms" className="text-muted-foreground hover:text-foreground hover:underline underline-offset-2 transition-colors">
+              Términos y Condiciones
+            </Link>
           </p>
         </footer>
       </div>

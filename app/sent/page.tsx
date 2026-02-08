@@ -103,6 +103,10 @@ export default async function SentPage({ searchParams }: SentPageProps) {
             >
               @LiammDev
             </a>
+            {" · "}
+            <Link href="/terms" className="text-muted-foreground hover:text-foreground hover:underline underline-offset-2 transition-colors">
+              Términos y Condiciones
+            </Link>
           </p>
         </footer>
       </div>
