@@ -1,6 +1,6 @@
 import React from "react"
 import type { Metadata, Viewport } from 'next'
-import { Inter, Playfair_Display, Caveat } from 'next/font/google'
+import { Inter, Playfair_Display, Caveat, Dancing_Script } from 'next/font/google'
 
 import './globals.css'
 
@@ -20,6 +20,12 @@ const caveat = Caveat({
   subsets: ['latin'],
   variable: '--font-caveat',
   weight: ['400', '500', '600', '700'],
+})
+
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+  variable: '--font-dancing',
+  weight: ['400', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -45,7 +51,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} ${caveat.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${playfair.variable} ${caveat.variable} ${dancingScript.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
