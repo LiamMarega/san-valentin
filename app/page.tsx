@@ -1,9 +1,21 @@
+"use client"
+
+import { useEffect } from "react"
 import Link from "next/link"
 import { LetterForm } from "@/components/letter-form"
 import { FloralTopLeft, FloralBottomRight, FloralSmall } from "@/components/floral-decorations"
 import { Heart } from "lucide-react"
+import { initAnalytics, trackEvent } from "@/lib/firebase"
 
 export default function Home() {
+  useEffect(() => {
+    // Inicializa analytics para la sesión y registra la vista de la home
+    initAnalytics()
+    trackEvent("page_view", {
+      page: "home",
+      path: typeof window !== "undefined" ? window.location.pathname : "/",
+    })
+  }, [])
   return (
     <main className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-4 py-12">
       {/* Floral decorations */}

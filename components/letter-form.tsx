@@ -21,6 +21,7 @@ import type { ThemeId, RelationshipType } from "@/constants/themes"
 import { LetterPreview } from "@/components/letter-preview"
 import { cn } from "@/lib/utils"
 import { getPaddle } from "@/components/paddle-loader"
+import { trackEvent } from "@/lib/firebase"
 
 // =============================================================================
 // Theme Selector Card
@@ -110,6 +111,11 @@ export function LetterForm() {
   useEffect(() => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
     setUserTimezone(tz)
+
+    // Formulario cargado
+    trackEvent("letter_form_view", {
+      timezone: tz,
+    })
   }, [])
 
   function capitalizeFirstLetter(value: string): string {
@@ -143,6 +149,9 @@ export function LetterForm() {
     e.preventDefault()
     setIsSubmitting(true)
     setError("")
+
+    // Intento de envío de carta
+    trackEvent("letter_submit_attempt")
 
     const formData = new FormData(e.currentTarget)
     const selectedType = formData.get("message_type") as string
@@ -194,9 +203,18 @@ export function LetterForm() {
 
       const { letterId, isPremium } = await res.json()
 
+      // Carta creada correctamente
+      trackEvent("letter_created", {
+        theme: selectedTheme,
+        relationship_type: relationshipType,
+        is_scheduled: isScheduled,
+        is_premium: isPremium,
+      })
+
       // Si es premium -> abrir Paddle Checkout overlay
       if (isPremium) {
         openPaddleCheckout(letterId, receiverEmail)
+        trackEvent("letter_premium_checkout_opened")
         return
       }
 
@@ -206,11 +224,14 @@ export function LetterForm() {
         const time = formData.get("scheduled_time") as string
         const params = new URLSearchParams({ scheduled: "1", date, time })
         router.push(`/sent?${params.toString()}`)
+        trackEvent("letter_sent_scheduled")
       } else {
         router.push("/sent")
+        trackEvent("letter_sent_immediate")
       }
     } catch {
       setError("Hubo un error al enviar la carta. Intenta de nuevo.")
+      trackEvent("letter_submit_error")
     } finally {
       setIsSubmitting(false)
     }
