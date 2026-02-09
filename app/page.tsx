@@ -46,23 +46,35 @@ export default function Home() {
           <LetterForm />
         </div>
 
+        {/* Pricing */}
+        <section className="mt-12 pt-8 border-t border-border text-center animate-fade-in-up animate-delay-300">
+          <h2 className="font-serif text-lg font-semibold text-foreground mb-4">Precios</h2>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center text-sm text-muted-foreground">
+            <div className="bg-card rounded-xl p-4 max-w-xs mx-auto w-full">
+              <p className="font-medium text-foreground">Plan Gratis</p>
+              <p>1 tema básico, envío inmediato</p>
+              <p className="text-primary font-semibold mt-1">$0</p>
+            </div>
+            <div className="bg-card rounded-xl p-4 max-w-xs mx-auto w-full">
+              <p className="font-medium text-foreground">Carta PRO</p>
+              <p>Temas premium, subida de foto, envío programado</p>
+              <p className="text-primary font-semibold mt-1">$1.00 USD (pago único)</p>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
-        <footer className="text-center mt-8">
-          <p className="text-sm text-muted-foreground">
-            Hecho con amor para San Valentín por{" "}
-            <a
-              href="https://www.instagram.com/liammdev/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-pink-500 hover:text-pink-600 hover:underline underline-offset-2 transition-colors"
-            >
-              @LiammDev
-            </a>
-            {" · "}
-            <Link href="/terms" className="text-muted-foreground hover:text-foreground hover:underline underline-offset-2 transition-colors">
-              Términos y Condiciones
-            </Link>
-          </p>
+        <footer className="py-10 border-t border-border mt-8">
+          <div className="container mx-auto text-center">
+            <p className="text-sm text-muted-foreground mb-4">
+              © 2024 ValentineDayLetter by Liam Marega
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
+              <Link href="/terms" className="hover:underline">Terms &amp; Conditions</Link>
+              <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+              <Link href="/refund" className="hover:underline">Refund Policy</Link>
+            </div>
+          </div>
         </footer>
       </div>
     </main>

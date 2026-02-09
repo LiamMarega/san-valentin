@@ -92,22 +92,17 @@ export default async function SentPage({ searchParams }: SentPageProps) {
         </div>
 
         {/* Footer */}
-        <footer className="text-center mt-8">
-          <p className="text-sm text-muted-foreground">
-            Hecho con amor para San Valentín por{" "}
-            <a
-              href="https://www.instagram.com/liammdev/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-pink-500 hover:text-pink-600 hover:underline underline-offset-2 transition-colors"
-            >
-              @LiammDev
-            </a>
-            {" · "}
-            <Link href="/terms" className="text-muted-foreground hover:text-foreground hover:underline underline-offset-2 transition-colors">
-              Términos y Condiciones
-            </Link>
-          </p>
+        <footer className="py-10 border-t border-border mt-8">
+          <div className="container mx-auto text-center">
+            <p className="text-sm text-muted-foreground mb-4">
+              © 2024 ValentineDayLetter by Liam Marega
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
+              <Link href="/terms" className="hover:underline">Terms &amp; Conditions</Link>
+              <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+              <Link href="/refund" className="hover:underline">Refund Policy</Link>
+            </div>
+          </div>
         </footer>
       </div>
     </main>

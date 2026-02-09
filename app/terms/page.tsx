@@ -188,14 +188,20 @@ export default function TermsPage() {
           </section>
         </article>
 
-        <footer className="mt-12 pt-8 border-t border-border text-center">
+        <footer className="mt-12 pt-8 border-t border-border text-center space-y-4">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Volver a Carta Secreta
+            Volver al inicio
           </Link>
+          <p className="text-sm text-muted-foreground">© 2024 ValentineDayLetter by Liam Marega</p>
+          <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
+            <Link href="/terms" className="hover:underline">Terms &amp; Conditions</Link>
+            <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+            <Link href="/refund" className="hover:underline">Refund Policy</Link>
+          </div>
         </footer>
       </div>
     </main>
