@@ -140,7 +140,8 @@ function ClassicTemplate({
         </motion.div>
 
         {/* Photo upload placeholder */}
-        <div className="mt-6 relative">
+        {/* Photo upload placeholder (HIDDEN PRO FEATURE) */}
+        {/* <div className="mt-6 relative">
           <div className="bg-white p-3 shadow-md max-w-[200px] mx-auto transform -rotate-2">
             <div className="aspect-[4/5] bg-gray-100 flex flex-col items-center justify-center text-gray-400 gap-1">
               <ImagePlus className="w-8 h-8" />
@@ -151,10 +152,11 @@ function ClassicTemplate({
             </p>
           </div>
           {isFeatureLocked("uploadPhoto") && <PremiumOverlay label="Subir Foto — Premium" />}
-        </div>
+        </div> */}
 
         {/* Music */}
-        <div className="mt-4 relative">
+        {/* Music (HIDDEN PRO FEATURE) */}
+        {/* <div className="mt-4 relative">
           <button
             disabled
             className="w-full flex items-center justify-center gap-2 py-2 border border-[#E5D5C5] rounded-lg text-sm text-[#8D5B4C] opacity-60"
@@ -162,7 +164,7 @@ function ClassicTemplate({
             <Music className="w-4 h-4" /> Cambiar Música
           </button>
           {isFeatureLocked("changeMusic") && <PremiumOverlay label="Música — Premium" />}
-        </div>
+        </div> */}
       </div>
     </div>
   )
@@ -229,9 +231,10 @@ function EditorialTemplate({
         </div>
 
         {/* Center — upload portrait */}
-        <div className="md:col-span-4 flex justify-center relative">
+        {/* Center — upload portrait (HIDDEN PRO FEATURE) */}
+        {/* <div className="md:col-span-4 flex justify-center relative">
           <div className="w-full max-w-[280px] aspect-square bg-[#FAFAFA] border border-gray-200 flex flex-col items-center justify-center relative group">
-            {/* Corner accents */}
+            
             <div className="absolute top-3 left-3 w-2 h-2 border-l border-t border-gray-300" />
             <div className="absolute top-3 right-3 w-2 h-2 border-r border-t border-gray-300" />
             <div className="absolute bottom-3 left-3 w-2 h-2 border-l border-b border-gray-300" />
@@ -242,7 +245,7 @@ function EditorialTemplate({
             <span className="text-[10px] uppercase tracking-[0.15em] text-gray-300 mt-1">Max 5MB</span>
           </div>
           {isFeatureLocked("uploadPhoto") && <PremiumOverlay label="Upload — Premium" />}
-        </div>
+        </div> */}
 
         {/* Right — content */}
         <div className="md:col-span-4 space-y-6">
@@ -357,7 +360,8 @@ function MidnightTemplate({
         </p>
 
         {/* Photo grid */}
-        <div className="relative grid grid-cols-3 gap-3 p-3 rounded-xl border border-white/5 bg-white/5 mb-8">
+        {/* Photo grid (HIDDEN PRO FEATURE) */}
+        {/* <div className="relative grid grid-cols-3 gap-3 p-3 rounded-xl border border-white/5 bg-white/5 mb-8">
           {[0, 1, 2].map((i) => (
             <div
               key={i}
@@ -369,7 +373,7 @@ function MidnightTemplate({
             </div>
           ))}
           {isFeatureLocked("uploadPhoto") && <PremiumOverlay label="Fotos — Premium" />}
-        </div>
+        </div> */}
 
         {/* Question */}
         <div className="text-center mb-6">
