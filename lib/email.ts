@@ -17,9 +17,12 @@ export async function sendLetterEmail({
   messageType,
   letterId,
 }: SendLetterEmailParams) {
-  // Definición de URL base
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL
+  // Prioridad: NEXT_PUBLIC_APP_URL (tu dominio) > VERCEL_URL (preview) > localhost
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+    ? process.env.NEXT_PUBLIC_APP_URL.startsWith("http")
+      ? process.env.NEXT_PUBLIC_APP_URL
+      : `https://${process.env.NEXT_PUBLIC_APP_URL}`
+    : process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
       : "http://localhost:3000"
 
