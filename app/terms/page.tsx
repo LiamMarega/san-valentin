@@ -196,7 +196,7 @@ export default function TermsPage() {
             <ArrowLeft className="w-4 h-4" />
             Volver al inicio
           </Link>
-          <p className="text-sm text-muted-foreground">© 2024 ValentineDayLetter by Liam Marega</p>
+          <p className="text-sm text-muted-foreground">© 2026 ValentineDayLetter by Liam Marega</p>
           <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
             <Link href="/pricing" className="hover:underline">Precios</Link>
             <Link href="/terms" className="hover:underline">Terms &amp; Conditions</Link>

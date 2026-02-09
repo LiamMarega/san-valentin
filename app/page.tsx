@@ -50,7 +50,7 @@ export default function Home() {
         <footer className="py-10 border-t border-border mt-8">
           <div className="container mx-auto text-center">
             <p className="text-sm text-muted-foreground mb-4">
-              © 2024 ValentineDayLetter by Liam Marega
+              © 2026 ValentineDayLetter by Liam Marega
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
               <Link href="/pricing" className="hover:underline">Precios</Link>
