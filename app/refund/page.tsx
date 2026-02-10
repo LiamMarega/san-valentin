@@ -37,35 +37,21 @@ export default function RefundPage() {
             </h2>
             <p>
               If you are a Consumer, you may have the right to cancel your purchase and request a refund within{" "}
-              <strong>14 days</strong> from the day after the Transaction is completed, in line with Paddle&apos;s Invoiced
-              Consumer Terms and applicable consumer protection laws. To exercise this right, you must clearly inform Paddle
-              (or us, so we can pass it on) of your decision to cancel within this 14-day period.
+              <strong>30 days</strong> from the day after the Transaction is completed. To exercise this right, you must clearly inform Paddle
+              (or us, so we can pass it on) of your decision to cancel within this 30-day period.
             </p>
           </section>
 
           <section>
             <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              2. Digital Content Exceptions
-            </h2>
-            <p>
-              Your right to cancel does <strong>not</strong> apply to the supply of digital content that you have already
-              started to download, stream or otherwise access, or to Products that you have already enjoyed, as described in
-              Paddle&apos;s terms. By generating, accessing or sending a PRO letter immediately, you acknowledge that you
-              consent to the immediate performance of the service and that you may lose your right of withdrawal for that
-              specific Transaction.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              3. Technical Issues and Duplicate Charges
+              2. Technical Issues and Duplicate Charges
             </h2>
             <p>
               Independently of the above, refunds may be granted if:
             </p>
             <ul className="list-disc pl-6 space-y-1">
               <li>There is a technical error in our platform that prevents the letter from being generated or sent.</li>
-              <li>A duplicate charge has occurred due to a technical glitch.</li>
+              <li>A duplicate charge has occurred.</li>
             </ul>
           </section>
 

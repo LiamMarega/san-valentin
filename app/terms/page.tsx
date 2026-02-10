@@ -34,7 +34,7 @@ export default function TermsPage() {
               Bienvenido a Carta del Día de San Valentín (en adelante, &quot;el Servicio&quot; o &quot;la Plataforma&quot;). Estos Términos y Condiciones (&quot;Términos&quot;) rigen el uso que haces de nuestro sitio web y servicios de envío de cartas digitales.
             </p>
             <p>
-              El Servicio es operado por Carta del Día de San Valentín, representada por Liam Marega (en adelante &quot;Nosotros&quot; o &quot;el Titular&quot;), con domicilio legal en Calle 1375, Paraná, Entre Ríos, Argentina y correo electrónico de contacto liammaregadevelop@gmail.com.
+              El Servicio es operado por Carta del Día de San Valentín, representada por Valentine&apos;s Day Letter (en adelante &quot;Nosotros&quot; o &quot;el Titular&quot;), con domicilio legal en Calle 1375, Paraná, Entre Ríos, Argentina y correo electrónico de contacto liammaregadevelop@gmail.com.
             </p>
             <p>
               Al acceder o utilizar nuestro Servicio, aceptas estar legalmente vinculado por estos Términos. Si no aceptas alguno de estos puntos, por favor no utilices la Plataforma.
@@ -155,7 +155,7 @@ export default function TermsPage() {
               8. Propiedad Intelectual del Titular
             </h2>
             <p>
-              Todos los derechos sobre el diseño de la web, el código fuente, los logotipos, las ilustraciones de los temas (templates), la música predeterminada y la marca Carta Secreta son propiedad exclusiva de Liam Marega o de sus licenciantes. Está prohibida su reproducción, distribución o modificación sin autorización expresa.
+              Todos los derechos sobre el diseño de la web, el código fuente, los logotipos, las ilustraciones de los temas (templates), la música predeterminada y la marca Carta Secreta son propiedad exclusiva de Valentine&apos;s Day Letter o de sus licenciantes. Está prohibida su reproducción, distribución o modificación sin autorización expresa.
             </p>
           </section>
 
