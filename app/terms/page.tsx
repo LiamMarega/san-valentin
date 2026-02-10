@@ -2,8 +2,8 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
 export const metadata = {
-  title: "Términos y Condiciones - Carta Secreta",
-  description: "Términos y Condiciones de uso de Carta Secreta.",
+  title: "Términos y Condiciones - Carta del Día de San Valentín",
+  description: "Términos y Condiciones de uso de Carta del Día de San Valentín.",
 }
 
 export default function TermsPage() {
@@ -31,10 +31,10 @@ export default function TermsPage() {
               1. Introducción y Aceptación
             </h2>
             <p>
-              Bienvenido a Carta Secreta (en adelante, &quot;el Servicio&quot; o &quot;la Plataforma&quot;). Estos Términos y Condiciones (&quot;Términos&quot;) rigen el uso que haces de nuestro sitio web y servicios de envío de cartas digitales.
+              Bienvenido a Carta del Día de San Valentín (en adelante, &quot;el Servicio&quot; o &quot;la Plataforma&quot;). Estos Términos y Condiciones (&quot;Términos&quot;) rigen el uso que haces de nuestro sitio web y servicios de envío de cartas digitales.
             </p>
             <p>
-              El Servicio es operado por Liam Marega (en adelante &quot;Nosotros&quot; o &quot;el Titular&quot;), con domicilio legal en Calle 1375, Paraná, Entre Ríos, Argentina y correo electrónico de contacto liammaregadevelop@gmail.com.
+              El Servicio es operado por Carta del Día de San Valentín, representada por Liam Marega (en adelante &quot;Nosotros&quot; o &quot;el Titular&quot;), con domicilio legal en Calle 1375, Paraná, Entre Ríos, Argentina y correo electrónico de contacto liammaregadevelop@gmail.com.
             </p>
             <p>
               Al acceder o utilizar nuestro Servicio, aceptas estar legalmente vinculado por estos Términos. Si no aceptas alguno de estos puntos, por favor no utilices la Plataforma.
@@ -46,7 +46,7 @@ export default function TermsPage() {
               2. Descripción del Servicio
             </h2>
             <p>
-              Carta Secreta es una plataforma digital que permite a los usuarios:
+              Carta del Día de San Valentín es una plataforma digital que permite a los usuarios:
             </p>
             <ul className="list-disc pl-6 space-y-1">
               <li>Crear y personalizar cartas digitales.</li>
@@ -93,10 +93,27 @@ export default function TermsPage() {
               Ciertas características (como temas Premium, programación de fecha, subida de fotos) requieren el pago de una tarifa única.
             </p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Pagos:</strong> Los pagos se procesan a través de proveedores externos seguros (ej. Stripe, Mercado Pago). Nosotros no almacenamos tus datos bancarios completos.</li>
-              <li><strong>Naturaleza del Bien:</strong> Al comprar una carta Premium, estás adquiriendo una licencia de uso de contenido digital.</li>
-              <li><strong>Política de Reembolsos:</strong> Dado que el producto es un bien digital de consumo inmediato o personalizado, no se ofrecen reembolsos una vez que la carta ha sido enviada o el diseño ha sido descargado/generado, salvo que exista una falla técnica comprobable imputable a nuestra Plataforma que impida el envío.</li>
-              <li><strong>Cambios de Precio:</strong> Nos reservamos el derecho de modificar los precios de los servicios PRO en cualquier momento.</li>
+              <li>
+                <strong>Pagos:</strong> Nuestros pagos son procesados por Paddle.com, que actúa como Merchant of Record y distribuidor autorizado del Producto. Paddle gestiona el cobro, los impuestos aplicables y la emisión de facturas, y nosotros no almacenamos tus datos bancarios completos.
+              </li>
+              <li>
+                <strong>Naturaleza del Bien:</strong> Al comprar una carta Premium, estás adquiriendo una licencia de uso de contenido digital.
+              </li>
+              <li>
+                <strong>Política de Reembolsos:</strong> Los pagos y reembolsos se gestionan de acuerdo con los Términos de Paddle para consumidores, disponibles en{" "}
+                <a
+                  href="https://www.paddle.com/legal/invoiced-consumer-terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  https://www.paddle.com/legal/invoiced-consumer-terms
+                </a>
+                . Si eres Consumidor, puedes tener derecho a cancelar tu compra y solicitar el reembolso dentro de los 14 días posteriores al día siguiente a la transacción, salvo en el caso de contenido digital que ya haya comenzado a descargarse, reproducirse o del cual ya hayas disfrutado, de acuerdo con la normativa aplicable y con la política de Paddle.
+              </li>
+              <li>
+                <strong>Cambios de Precio:</strong> Nos reservamos el derecho de modificar los precios de los servicios PRO en cualquier momento. Los cambios no afectarán a compras ya efectuadas.
+              </li>
             </ul>
           </section>
 

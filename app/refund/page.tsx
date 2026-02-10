@@ -22,29 +22,46 @@ export default function RefundPage() {
           Refund Policy
         </h1>
         <p className="text-sm text-muted-foreground mb-10">
-          Last Updated: February 2024
+          Last Updated: February 2026
         </p>
 
         <article className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-muted-foreground">
           <p>
-            Due to the nature of digital goods, ValentineDayLetter has a specific refund policy:
+            Our orders are processed by Paddle.com, our Merchant of Record and authorised reseller. The following
+            information summarises how refunds work for purchases made through Paddle.
           </p>
 
           <section>
             <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              1. Digital Products
+              1. Right to Cancel (Consumers)
             </h2>
             <p>
-              Since our PRO letters are digital content delivered immediately or upon a scheduled date, we generally do not offer refunds once the payment is confirmed and the letter is processed.
+              If you are a Consumer, you may have the right to cancel your purchase and request a refund within{" "}
+              <strong>14 days</strong> from the day after the Transaction is completed, in line with Paddle&apos;s Invoiced
+              Consumer Terms and applicable consumer protection laws. To exercise this right, you must clearly inform Paddle
+              (or us, so we can pass it on) of your decision to cancel within this 14-day period.
             </p>
           </section>
 
           <section>
             <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              2. Exceptions
+              2. Digital Content Exceptions
             </h2>
             <p>
-              We will issue a full refund if:
+              Your right to cancel does <strong>not</strong> apply to the supply of digital content that you have already
+              started to download, stream or otherwise access, or to Products that you have already enjoyed, as described in
+              Paddle&apos;s terms. By generating, accessing or sending a PRO letter immediately, you acknowledge that you
+              consent to the immediate performance of the service and that you may lose your right of withdrawal for that
+              specific Transaction.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
+              3. Technical Issues and Duplicate Charges
+            </h2>
+            <p>
+              Independently of the above, refunds may be granted if:
             </p>
             <ul className="list-disc pl-6 space-y-1">
               <li>There is a technical error in our platform that prevents the letter from being generated or sent.</li>
@@ -54,23 +71,37 @@ export default function RefundPage() {
 
           <section>
             <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              3. How to Request a Refund
+              4. How to Request a Refund
             </h2>
             <p>
-              If you experience technical issues, please contact{" "}
+              For purchases processed by Paddle, refunds are ultimately handled at Paddle&apos;s discretion and in
+              accordance with their consumer terms. If you experience technical issues or believe you are entitled to a
+              refund, please contact{" "}
               <a href="mailto:liammaregadevelop@gmail.com" className="text-primary hover:underline">
                 liammaregadevelop@gmail.com
               </a>{" "}
-              within 7 days of purchase with your transaction ID.
+              or reach out directly to Paddle through their support channels. To help locate your order, please include the
+              email used at checkout and, if possible, your transaction ID or receipt.
             </p>
           </section>
 
           <section>
             <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              4. Merchant of Record
+              5. Merchant of Record
             </h2>
             <p>
-              Our order process is conducted by our online reseller Paddle.com. Paddle is the Merchant of Record for all our orders.
+              Our order process is conducted by our online reseller Paddle.com. Paddle is the Merchant of Record for all our
+              orders and is responsible for payment processing, billing, applicable taxes and issuing refunds in line with
+              their{" "}
+              <a
+                href="https://www.paddle.com/legal/invoiced-consumer-terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Invoiced Consumer Terms and Conditions
+              </a>
+              .
             </p>
           </section>
         </article>
