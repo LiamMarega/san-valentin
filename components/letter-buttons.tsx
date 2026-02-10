@@ -65,7 +65,6 @@ export function LetterButtons({
     "Ya casi ponés que sí",
     "No rompas mi corazoncito",
     "Te estoy mirando...",
-    "Nicole, sos increíble",
     "Aceptá mi amorcito",
     "No me dejes en visto",
     "Apretá el botón rosa",
