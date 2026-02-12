@@ -1,18 +1,25 @@
+// app/api/webhooks/mercadopago/route.ts
 import { NextResponse } from "next/server"
 import { MercadoPagoConfig, Payment } from "mercadopago"
 import { sql } from "@/lib/db"
 import { sendLetterEmail } from "@/lib/email"
 
-const mpClient = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
-})
+// ✅ Mover la instanciación dentro de una función lazy para evitar crash al cargar el módulo
+function getMPClient() {
+  const token = process.env.MP_ACCESS_TOKEN
+  if (!token) {
+    throw new Error("MP_ACCESS_TOKEN is not configured")
+  }
+  return new MercadoPagoConfig({ accessToken: token })
+}
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    // MercadoPago envia distintos tipos de notificacion.
-    // Manejamos ambos formatos: webhook (type + data.id) e IPN legacy (topic + resource)
+    console.log("MercadoPago webhook received:", JSON.stringify(body))
+
+    // Extraer paymentId de ambos formatos (webhook v2 e IPN legacy)
     let paymentId: string | null = null
 
     if (body.type === "payment" && body.data?.id) {
@@ -23,34 +30,38 @@ export async function POST(req: Request) {
     }
 
     if (!paymentId) {
-      console.log("MercadoPago webhook received but no paymentId found in body:", JSON.stringify(body))
+      console.log("No paymentId found, ignoring.")
       return NextResponse.json({ received: true })
     }
 
-    console.log(`Processing MercadoPago notification for payment ${paymentId}...`)
+    console.log(`Processing payment ${paymentId}...`)
 
-    // Verificar el pago consultando la API de MercadoPago (no confiar en el body del webhook)
+    // ✅ Instanciar el cliente dentro del try-catch
+    const mpClient = getMPClient()
     const paymentClient = new Payment(mpClient)
-    const payment = await paymentClient.get({ id: paymentId })
+
+    // ✅ Convertir a NUMBER - el SDK lo requiere
+    const payment = await paymentClient.get({ id: Number(paymentId) })
 
     if (!payment) {
-      console.error("Payment not found in MercadoPago API:", paymentId)
+      console.error("Payment not found:", paymentId)
       return NextResponse.json({ received: true })
     }
 
     if (!payment.external_reference) {
-      console.error("Payment missing external_reference:", paymentId, "Payment status:", payment.status)
+      console.log(
+        `Payment ${paymentId} has no external_reference (status: ${payment.status}). Skipping.`
+      )
       return NextResponse.json({ received: true })
     }
 
     const letterId = payment.external_reference
     const status = payment.status
 
-    console.log(`MercadoPago payment ${paymentId} for letter ${letterId}: status=${status}`)
+    console.log(`Payment ${paymentId} → letter ${letterId} → status: ${status}`)
 
     if (status === "approved") {
-      console.log(`Attempting to update DB for letter ${letterId} to 'paid' and 'sent'...`)
-      // 1. Actualizar DB a 'paid' (idempotente: WHERE payment_status != 'paid')
+      // 1. Actualizar DB (idempotente)
       const updateResult = await sql`
         UPDATE letters
         SET payment_status = 'paid',
@@ -62,17 +73,15 @@ export async function POST(req: Request) {
       `
 
       if (updateResult.length === 0) {
-        console.log(`No rows updated for letter ${letterId}. Possibly already processed or ID mismatch.`)
-        // Aún así retornamos 200
+        console.log(`Letter ${letterId} already processed or not found.`)
         return NextResponse.json({ received: true })
       }
 
       const letter = updateResult[0]
-      console.log(`Successfully updated letter ${letterId} in DB.`)
+      console.log(`Letter ${letterId} updated in DB.`)
 
-      // 2. Enviar el email que estaba pendiente
+      // 2. Enviar email (no bloquear el webhook si falla)
       try {
-        console.log(`Sending email for letter ${letterId} to ${letter.receiver_email}...`)
         await sendLetterEmail({
           to: letter.receiver_email,
           senderName: letter.sender_name,
@@ -80,20 +89,20 @@ export async function POST(req: Request) {
           messageType: letter.message_type,
           letterId: letter.id,
         })
-        console.log(`Email successfully sent for letter: ${letterId}`)
+        console.log(`Email sent for letter ${letterId}`)
       } catch (emailError) {
-        console.error(`Error sending email for letter ${letterId}:`, emailError)
-        // No lanzamos error aquí para no fallar el webhook si el pago ya se procesó en DB
+        console.error(`Email failed for letter ${letterId}:`, emailError)
+        // Guardar flag para reintentar después si quieres
+        await sql`
+          UPDATE letters SET email_sent = false WHERE id = ${letterId}
+        `.catch(() => { })
       }
-    } else {
-      console.log(`Payment ${paymentId} status is ${status}, skipping DB update.`)
     }
 
-    // Siempre retornar 200 para evitar reintentos infinitos de MercadoPago
     return NextResponse.json({ received: true })
   } catch (error) {
-    console.error("MercadoPago webhook critical error:", error)
-    // Retornar 200 incluso en error para evitar reintentos
+    console.error("Webhook critical error:", error)
+    // ✅ Siempre retornar 200 para evitar reintentos infinitos
     return NextResponse.json({ received: true })
   }
 }
