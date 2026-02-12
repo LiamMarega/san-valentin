@@ -564,8 +564,8 @@ export function LetterForm() {
         </form>
 
         {/* ====== RIGHT COLUMN: Live Preview ====== */}
-        <div className={cn("lg:block", showPreview ? "block" : "hidden")}>
-          <div className="sticky top-8">
+        <div className={cn("lg:block relative", showPreview ? "block" : "hidden")}>
+          <div className="sticky top-24 self-start">
             <LetterPreview
               themeId={selectedTheme}
               senderName={senderName}

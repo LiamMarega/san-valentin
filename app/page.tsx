@@ -31,7 +31,7 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
   return (
-    <main className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-screen relative overflow-x-hidden flex flex-col items-center justify-center px-4 py-12">
       {/* Floral decorations */}
       <FloralTopLeft className="absolute top-0 left-0 w-48 h-48 md:w-72 md:h-72 opacity-80 pointer-events-none -translate-x-8 -translate-y-8" />
       <FloralBottomRight className="absolute bottom-0 right-0 w-48 h-48 md:w-72 md:h-72 opacity-80 pointer-events-none translate-x-8 translate-y-8" />
