@@ -150,7 +150,12 @@ export function LetterForm() {
 
     // Check for free letter limit
     const isFreeTheme = !isThemeLocked(selectedTheme)
-    const hasSentLetter = localStorage.getItem("love_letter_sent")
+    let hasSentLetter = false
+    try {
+      hasSentLetter = !!window.localStorage.getItem("love_letter_sent")
+    } catch (e) {
+      console.error("Error accessing localStorage:", e)
+    }
 
     if (isFreeTheme && hasSentLetter) {
       setIsLimitModalOpen(true)
@@ -228,6 +233,18 @@ export function LetterForm() {
         return
       }
 
+      // Mark as sent if it's a free letter
+      if (isFreeTheme) {
+        try {
+          window.localStorage.setItem("love_letter_sent", JSON.stringify({
+            sent: true,
+            timestamp: new Date().toISOString()
+          }))
+        } catch (e) {
+          console.error("Error saving to localStorage:", e)
+        }
+      }
+
       // Flujo gratis -> redirigir directamente
       if (isScheduled) {
         const date = formData.get("scheduled_date") as string
@@ -238,14 +255,6 @@ export function LetterForm() {
       } else {
         router.push("/sent")
         trackEvent("letter_sent_immediate")
-      }
-
-      // Mark as sent if it's a free letter
-      if (isFreeTheme) {
-        localStorage.setItem("love_letter_sent", JSON.stringify({
-          sent: true,
-          timestamp: new Date().toISOString()
-        }))
       }
     } catch {
       setError("Hubo un error al enviar la carta. Intenta de nuevo.")
@@ -264,30 +273,7 @@ export function LetterForm() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* ====== LEFT COLUMN: Form ====== */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
-          {/* ── Relationship Type ── */}
-          {/* <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
-              Tipo de relación
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {RELATIONSHIP_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setRelationshipType(opt.value)}
-                  className={cn(
-                    "px-3 py-1.5 rounded-full border text-sm font-medium transition-all",
-                    relationshipType === opt.value
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-muted-foreground hover:border-primary/30"
-                  )}
-                >
-                  {opt.emoji} {opt.label}
-                </button>
-              ))}
-            </div>
-          </div> */}
+
 
           {/* ── Sender name ── */}
           <div className="flex flex-col gap-1.5">
