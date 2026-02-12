@@ -21,6 +21,8 @@ import type { ThemeId, RelationshipType } from "@/constants/themes"
 import { LetterPreview } from "@/components/letter-preview"
 import { cn } from "@/lib/utils"
 import { trackEvent } from "@/lib/firebase"
+import { LimitModal } from "@/components/limit-modal"
+
 
 // =============================================================================
 // Theme Selector Card
@@ -90,6 +92,7 @@ export function LetterForm() {
   // Theme & preview state
   const [selectedTheme, setSelectedTheme] = useState<ThemeId>("classic")
   const [showPreview, setShowPreview] = useState(false)
+  const [isLimitModalOpen, setIsLimitModalOpen] = useState(false)
 
   // New fields
   const [relationshipType, setRelationshipType] = useState<RelationshipType>("pareja")
@@ -144,6 +147,16 @@ export function LetterForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+
+    // Check for free letter limit
+    const isFreeTheme = !isThemeLocked(selectedTheme)
+    const hasSentLetter = localStorage.getItem("love_letter_sent")
+
+    if (isFreeTheme && hasSentLetter) {
+      setIsLimitModalOpen(true)
+      return
+    }
+
     setIsSubmitting(true)
     setError("")
 
@@ -225,6 +238,14 @@ export function LetterForm() {
       } else {
         router.push("/sent")
         trackEvent("letter_sent_immediate")
+      }
+
+      // Mark as sent if it's a free letter
+      if (isFreeTheme) {
+        localStorage.setItem("love_letter_sent", JSON.stringify({
+          sent: true,
+          timestamp: new Date().toISOString()
+        }))
       }
     } catch {
       setError("Hubo un error al enviar la carta. Intenta de nuevo.")
@@ -521,6 +542,11 @@ export function LetterForm() {
           </div>
         </div>
       </div>
+
+      <LimitModal
+        isOpen={isLimitModalOpen}
+        onClose={() => setIsLimitModalOpen(false)}
+      />
     </div>
   )
 }
