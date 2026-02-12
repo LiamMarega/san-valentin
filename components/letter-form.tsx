@@ -436,6 +436,9 @@ export function LetterForm() {
               <Palette className="w-4 h-4 text-primary" />
               Estilo de Carta
             </label>
+
+            {/* Free themes */}
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Gratis</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {THEMES.filter((t) => !t.isLocked).map((theme) => (
                 <ThemeCard
@@ -446,6 +449,22 @@ export function LetterForm() {
                 />
               ))}
             </div>
+
+            {/* Pro themes */}
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-2 flex items-center gap-1">
+              <Lock className="w-3 h-3" /> Pro — $1 USD
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {THEMES.filter((t) => t.isLocked).map((theme) => (
+                <ThemeCard
+                  key={theme.id}
+                  theme={theme}
+                  isSelected={selectedTheme === theme.id}
+                  onSelect={() => setSelectedTheme(theme.id)}
+                />
+              ))}
+            </div>
+
             <p className="text-xs text-muted-foreground">
               {getThemeById(selectedTheme).description}
             </p>

@@ -111,6 +111,8 @@ export async function sendLetterEmail({
   const fromAddress =
     process.env.RESEND_FROM || "Carta Secreta <onboarding@resend.dev>"
 
+  console.log(`Sending email from ${fromAddress} to ${to} using Resend...`)
+
   const { data, error } = await resend.emails.send({
     from: fromAddress,
     to,
@@ -119,9 +121,10 @@ export async function sendLetterEmail({
   })
 
   if (error) {
-    console.error("Resend error:", error)
+    console.error("Resend error detail:", JSON.stringify(error, null, 2))
     throw new Error(`Failed to send email: ${error.message}`)
   }
 
+  console.log("Resend response data:", JSON.stringify(data, null, 2))
   return data
 }
