@@ -1,7 +1,7 @@
 "use client"
 
-import React from "react"
-import { motion } from "framer-motion"
+import React, { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Heart, Star, Sparkles, Send, Music, ImagePlus, Lock } from "lucide-react"
 import type { ThemeId } from "@/constants/themes"
 import { getThemeById, isFeatureLocked } from "@/constants/themes"
@@ -31,6 +31,7 @@ export function LetterTemplate(props: LetterTemplateProps) {
     editorial: EditorialTemplate,
     midnight: MidnightTemplate,
     scrapbook: ScrapbookTemplate,
+    romantic_pro: RomanticProTemplate,
   }
 
   const Renderer = renderers[theme.id]
@@ -65,6 +66,145 @@ function PremiumOverlay({ label }: { label: string }) {
     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-lg bg-black/5 backdrop-blur-[1px] cursor-not-allowed">
       <Lock className="w-5 h-5 text-gray-400 mb-1" />
       <span className="text-xs text-gray-500 font-medium">{label}</span>
+    </div>
+  )
+}
+
+// =============================================================================
+function RomanticProTemplate({
+  senderName,
+  receiverName,
+  messageType,
+  customContent,
+  compact,
+}: LetterTemplateProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const displayName = receiverName || "Mi Amor"
+  const displaySender = senderName || "Tu enamorado/a"
+  const displayMessage = messageType || "¿Querés ser mi San Valentín?"
+  const displayContent =
+    customContent ||
+    "Desde que llegaste a mi vida, cada momento se ha vuelto especial. Sos mi pensamiento más recurrente y mi sentimiento más profundo. Te amo hoy y siempre."
+
+  return (
+    <div className={`relative rounded-md overflow-hidden ${compact ? "scale-[0.6] origin-top-left" : ""}`}>
+      {/* Premium Texture & Vintage Vignette */}
+      <div className="absolute inset-0 opacity-40 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/parchment.png')] z-20" />
+      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(139,69,19,0.15)] z-30" />
+
+      {/* Raining Hearts Background */}
+      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none overflow-hidden">
+        {mounted && [...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ y: -20, opacity: 0 }}
+            animate={{
+              y: [0, 600],
+              opacity: [0, 1, 0],
+              x: Math.sin(i) * 20
+            }}
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "linear"
+            }}
+            className="absolute"
+            style={{ left: `${(i / 12) * 100}%`, top: -20 }}
+          >
+            <Heart size={20 + Math.random() * 20} fill="#C14E4E" className="text-[#C14E4E]" />
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="relative z-10 bg-[#FFF9F2] p-8 md:p-14 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-[12px] border-[#DBC7B5] m-2">
+        {/* Decorative Corner Elements */}
+        <div className="absolute top-4 left-4 text-[#E29595] opacity-40">
+          <Heart size={32} fill="currentColor" />
+        </div>
+        <div className="absolute top-4 right-4 text-[#E29595] opacity-40 rotate-90">
+          <Heart size={32} fill="currentColor" />
+        </div>
+        <div className="absolute bottom-4 left-4 text-[#E29595] opacity-40 -rotate-90">
+          <Heart size={32} fill="currentColor" />
+        </div>
+        <div className="absolute bottom-4 right-4 text-[#E29595] opacity-40 180">
+          <Heart size={32} fill="currentColor" />
+        </div>
+
+        {/* Header */}
+        <div className="text-center mb-8 relative">
+          <div className="flex justify-center gap-1 mb-4">
+            <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
+            <Heart className="w-8 h-8 text-[#C14E4E]" fill="currentColor" />
+            <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
+          </div>
+          <h2 className="font-serif text-4xl md:text-5xl font-extrabold text-[#3D2B1F] tracking-tighter italic">
+            Querido {displayName},
+          </h2>
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <div className="h-[1px] w-8 bg-[#DBC7B5]" />
+            <p className="text-[10px] text-[#A68A78] uppercase tracking-[0.3em] font-bold">
+              14 de Febrero, {new Date().getFullYear()}
+            </p>
+            <div className="h-[1px] w-8 bg-[#DBC7B5]" />
+          </div>
+        </div>
+
+        {/* Paper Content Area */}
+        <div className="relative">
+          <div
+            className="font-handwritten text-2xl md:text-3xl text-[#3D2B1F] leading-[2.5rem] min-h-[160px] relative z-10"
+            style={{
+              backgroundImage: "linear-gradient(transparent 95%, rgba(219, 199, 181, 0.4) 95%)",
+              backgroundSize: "100% 2.5rem",
+            }}
+          >
+            <div className="mb-6 whitespace-pre-wrap">
+              {displayContent}
+            </div>
+
+            <div className="mt-12 text-right italic decoration-[#E29595]/30">
+              Siempre con vos,<br />
+              <span className="text-3xl md:text-4xl text-[#C14E4E]">{displaySender}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Elegant Seal & Flowers Placeholder */}
+        <div className="mt-10 pt-10 border-t-2 border-[#DBC7B5]/30 text-center relative">
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#FFF9F2] px-4">
+            <Heart className="w-10 h-10 text-[#C14E4E]" fill="currentColor" />
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="font-serif text-3xl md:text-4xl font-bold text-[#3D2B1F] mt-4"
+          >
+            {displayMessage}
+          </motion.p>
+
+          <div className="flex justify-center gap-4 mt-6 opacity-30">
+            <Heart size={16} fill="#C14E4E" />
+            <Heart size={16} fill="#C14E4E" />
+            <Heart size={16} fill="#C14E4E" />
+          </div>
+        </div>
+
+        {/* Premium Wax Seal Overlay Layer */}
+        <div className="absolute top-1/2 right-4 -translate-y-1/2 opacity-10 pointer-events-none transform rotate-12">
+          <svg width="120" height="120" viewBox="0 0 100 100" fill="#C14E4E">
+            <path d="M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 88C29 88 12 71 12 50S29 12 50 12s38 17 38 38-17 38-38 38z" />
+            <path d="M50 25c-6.6 0-12 5.4-12 12 0 4.2 2.2 7.8 5.4 10L50 80l6.6-33c3.2-2.2 5.4-5.8 5.4-10 0-6.6-5.4-12-12-12z" />
+          </svg>
+        </div>
+      </div>
     </div>
   )
 }

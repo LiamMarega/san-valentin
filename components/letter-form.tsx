@@ -46,8 +46,9 @@ function ThemeCard({
         "relative flex flex-col items-center gap-2 rounded-xl border-2 p-3 transition-all text-left w-full",
         isSelected
           ? "border-primary bg-primary/5 shadow-md ring-2 ring-primary/20"
-          : "border-border hover:border-primary/30 bg-card",
-        locked && !isSelected && "opacity-60"
+          : locked
+            ? "border-amber-200 hover:border-amber-400 bg-card hover:shadow-md"
+            : "border-border hover:border-primary/30 bg-card"
       )}
     >
       {/* Color swatch */}
@@ -58,7 +59,11 @@ function ThemeCard({
           theme.preview.accent
         )}
       >
-        {locked ? <Lock className="w-5 h-5 text-gray-400" /> : <Heart className="w-5 h-5" fill="currentColor" />}
+        {locked ? (
+          <Sparkles className="w-5 h-5 text-amber-500" />
+        ) : (
+          <Heart className="w-5 h-5" fill="currentColor" />
+        )}
       </div>
 
       <span className="text-xs font-semibold text-foreground leading-tight text-center">
@@ -66,12 +71,12 @@ function ThemeCard({
       </span>
 
       {locked && (
-        <span className="absolute top-1.5 right-1.5 inline-flex items-center gap-0.5 rounded-full bg-gray-100 px-1.5 py-0.5 text-[9px] font-bold text-gray-500 uppercase">
-          <Lock className="w-2.5 h-2.5" /> Pro
+        <span className="absolute top-1.5 right-1.5 inline-flex items-center gap-0.5 rounded-full bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold text-amber-700 uppercase">
+          <Sparkles className="w-2.5 h-2.5" /> Pro
         </span>
       )}
 
-      {isSelected && !locked && (
+      {isSelected && (
         <motion.div
           layoutId="theme-indicator"
           className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary"
@@ -90,7 +95,7 @@ export function LetterForm() {
   const [error, setError] = useState("")
 
   // Theme & preview state
-  const [selectedTheme, setSelectedTheme] = useState<ThemeId>("classic")
+  const [selectedTheme, setSelectedTheme] = useState<ThemeId>("romantic_pro")
   const [showPreview, setShowPreview] = useState(false)
   const [isLimitModalOpen, setIsLimitModalOpen] = useState(false)
 
@@ -444,25 +449,41 @@ export function LetterForm() {
               Estilo de Carta
             </label>
 
-            {/* Free themes */}
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Gratis</p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {THEMES.filter((t) => !t.isLocked).map((theme) => (
-                <ThemeCard
-                  key={theme.id}
-                  theme={theme}
-                  isSelected={selectedTheme === theme.id}
-                  onSelect={() => setSelectedTheme(theme.id)}
-                />
-              ))}
+            {/* ⭐ PRO themes FIRST */}
+            <div className="relative p-3 rounded-xl border-2 border-amber-300/50 bg-gradient-to-br from-amber-50/50 to-orange-50/30">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-bold text-amber-700 uppercase tracking-wide flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Premium — Solo $1 USD
+                </p>
+                <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">
+                  ⭐ Más elegidos
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {THEMES.filter((t) => t.isLocked).map((theme, i) => (
+                  <div key={theme.id} className="relative">
+                    {i === 0 && (
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-10 bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
+                        🔥 Popular
+                      </div>
+                    )}
+                    <ThemeCard
+                      theme={theme}
+                      isSelected={selectedTheme === theme.id}
+                      onSelect={() => setSelectedTheme(theme.id)}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Pro themes */}
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-2 flex items-center gap-1">
-              <Lock className="w-3 h-3" /> Pro — $1 USD
+            {/* Free themes AFTER */}
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-1">
+              Gratis (básico)
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {THEMES.filter((t) => t.isLocked).map((theme) => (
+              {THEMES.filter((t) => !t.isLocked).map((theme) => (
                 <ThemeCard
                   key={theme.id}
                   theme={theme}
@@ -477,6 +498,26 @@ export function LetterForm() {
             </p>
           </div>
 
+          {/* Pro Value Banner */}
+          {isThemeLocked(selectedTheme) && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4"
+            >
+              <p className="text-sm font-semibold text-amber-800 flex items-center gap-2 mb-2">
+                <Sparkles className="w-4 h-4" />
+                ¿Qué incluye el tema Pro?
+              </p>
+              <ul className="text-xs text-amber-700 space-y-1">
+                <li className="flex items-center gap-2">✅ Diseño exclusivo y premium</li>
+                <li className="flex items-center gap-2">✅ Animaciones especiales</li>
+                <li className="flex items-center gap-2">✅ Tu carta destaca entre todas</li>
+                <li className="flex items-center gap-2">✅ Solo $1 USD — precio de un café ☕</li>
+              </ul>
+            </motion.div>
+          )}
+
           {error && (
             <p className="text-destructive text-sm text-center" role="alert">
               {error}
@@ -487,19 +528,27 @@ export function LetterForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-primary text-primary-foreground font-semibold py-3.5 px-6 rounded-lg hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-lg shadow-lg hover:shadow-xl mt-2"
+            className={cn(
+              "w-full font-semibold py-3.5 px-6 rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-lg shadow-lg hover:shadow-xl mt-2",
+              isThemeLocked(selectedTheme)
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                : "bg-primary text-primary-foreground hover:opacity-90"
+            )}
           >
             {isSubmitting ? (
               <>
-                <span className="animate-spin inline-block w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full" />
+                <span className="animate-spin inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
                 Guardando...
               </>
             ) : isThemeLocked(selectedTheme) ? (
-              "Pagar $1 USD y Enviar"
+              <>
+                <Sparkles className="w-5 h-5" />
+                Desbloquear y Enviar — $1 USD
+              </>
             ) : isScheduled ? (
               "Programar Carta"
             ) : (
-              "Enviar Carta Ahora"
+              "Enviar Carta Gratis"
             )}
           </button>
 

@@ -5,7 +5,7 @@
 // and feature-flag locking state. To add a new theme, append to THEMES array.
 // =============================================================================
 
-export type ThemeId = "classic" | "editorial" | "midnight" | "scrapbook"
+export type ThemeId = "classic" | "editorial" | "midnight" | "scrapbook" | "romantic_pro"
 
 export type RelationshipType = "pareja" | "amigo" | "familia" | "otro"
 
@@ -71,6 +71,35 @@ export const RELATIONSHIP_OPTIONS: { value: RelationshipType; label: string; emo
 // Theme Definitions
 // ---------------------------------------------------------------------------
 export const THEMES: ThemeConfig[] = [
+  // 0. Romantic Pro (Premium Paper Letter)
+  {
+    id: "romantic_pro",
+    name: "Romántico Pro",
+    description: "Estética vintage premium con papel texturizado, bordes artesanales y una lluvia de corazones",
+    isLocked: true,
+    preview: {
+      cardBg: "bg-[#FFF9F2]",
+      accent: "text-[#C14E4E]",
+    },
+    colors: {
+      background: "#F8EFE4",
+      card: "#FFF9F2",
+      cardForeground: "#3D2B1F",
+      primary: "#C14E4E",
+      primaryForeground: "#FFFFFF",
+      secondary: "#F4E4E4",
+      accent: "#E29595",
+      muted: "#D4C3A3",
+      border: "#DBC7B5",
+    },
+    fonts: {
+      heading: "font-serif",
+      body: "font-sans",
+      special: "font-handwritten",
+    },
+    wrapperClass: "theme-romantic-pro",
+  },
+
   // 1. Clásico Romántico  (design #1 — warm paper letter)
   {
     id: "classic",
@@ -106,7 +135,7 @@ export const THEMES: ThemeConfig[] = [
     id: "scrapbook",
     name: "Scrapbook Kawaii",
     description: "Estilo cuaderno con garabatos, stickers y colores pastel",
-    isLocked: false,
+    isLocked: true,
     preview: {
       cardBg: "bg-[#AEC6CF]",
       accent: "text-[#5D54A4]",

@@ -37,6 +37,8 @@ export const viewport: Viewport = {
 }
 
 import { FundingBanner } from "@/components/funding-banner"
+import { FloatingProBadge } from "@/components/floating-pro-badge"
+import { Toaster } from "sonner"
 
 export default function RootLayout({
   children,
@@ -55,6 +57,8 @@ export default function RootLayout({
       <body className={`${inter.variable} ${playfair.variable} ${caveat.variable} ${dancingScript.variable} font-sans antialiased`}>
         <FundingBanner />
         {children}
+        <FloatingProBadge />
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   )
