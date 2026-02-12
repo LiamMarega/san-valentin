@@ -36,6 +36,8 @@ export const viewport: Viewport = {
   themeColor: '#C76A5B',
 }
 
+import { FundingBanner } from "@/components/funding-banner"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -51,6 +53,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${playfair.variable} ${caveat.variable} ${dancingScript.variable} font-sans antialiased`}>
+        <FundingBanner />
         {children}
       </body>
     </html>

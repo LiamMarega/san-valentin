@@ -1,32 +1,21 @@
 // app/api/webhooks/mercadopago/route.ts
 import { NextResponse } from "next/server"
-import { MercadoPagoConfig, Payment } from "mercadopago"
-import { sql } from "@/lib/db"
-import { sendLetterEmail } from "@/lib/email"
 
-// ✅ Mover la instanciación dentro de una función lazy para evitar crash al cargar el módulo
-function getMPClient() {
-  const token = process.env.MP_ACCESS_TOKEN
-  if (!token) {
-    throw new Error("MP_ACCESS_TOKEN is not configured")
-  }
-  return new MercadoPagoConfig({ accessToken: token })
-}
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+export const maxDuration = 30 // Solo funciona en Vercel Pro (60s max)
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
+    console.log("MP webhook received:", JSON.stringify(body))
 
-    console.log("MercadoPago webhook received:", JSON.stringify(body))
-
-    // Extraer paymentId de ambos formatos (webhook v2 e IPN legacy)
     let paymentId: string | null = null
 
     if (body.type === "payment" && body.data?.id) {
       paymentId = String(body.data.id)
     } else if (body.topic === "payment" && body.resource) {
-      const parts = body.resource.split("/")
-      paymentId = parts[parts.length - 1]
+      paymentId = body.resource.split("/").pop() ?? null
     }
 
     if (!paymentId) {
@@ -34,75 +23,131 @@ export async function POST(req: Request) {
       return NextResponse.json({ received: true })
     }
 
-    console.log(`Processing payment ${paymentId}...`)
+    console.log(`Payment ${paymentId} received, processing in background...`)
 
-    // ✅ Instanciar el cliente dentro del try-catch
-    const mpClient = getMPClient()
-    const paymentClient = new Payment(mpClient)
-
-    // ✅ Convertir a NUMBER - el SDK lo requiere
-    const payment = await paymentClient.get({ id: Number(paymentId) })
-
-    if (!payment) {
-      console.error("Payment not found:", paymentId)
-      return NextResponse.json({ received: true })
-    }
-
-    if (!payment.external_reference) {
-      console.log(
-        `Payment ${paymentId} has no external_reference (status: ${payment.status}). Skipping.`
-      )
-      return NextResponse.json({ received: true })
-    }
-
-    const letterId = payment.external_reference
-    const status = payment.status
-
-    console.log(`Payment ${paymentId} → letter ${letterId} → status: ${status}`)
-
-    if (status === "approved") {
-      // 1. Actualizar DB (idempotente)
-      const updateResult = await sql`
-        UPDATE letters
-        SET payment_status = 'paid',
-            mp_payment_id = ${paymentId},
-            status = 'sent'
-        WHERE id = ${letterId}
-          AND payment_status != 'paid'
-        RETURNING *
-      `
-
-      if (updateResult.length === 0) {
-        console.log(`Letter ${letterId} already processed or not found.`)
+    // ✅ Intentar usar after() para procesar en background (Next.js 15+)
+    try {
+      const { after } = require("next/server")
+      if (typeof after === "function") {
+        after(async () => {
+          try {
+            await processPayment(paymentId!)
+          } catch (err) {
+            console.error("Background processing error:", err)
+          }
+        })
         return NextResponse.json({ received: true })
       }
-
-      const letter = updateResult[0]
-      console.log(`Letter ${letterId} updated in DB.`)
-
-      // 2. Enviar email (no bloquear el webhook si falla)
-      try {
-        await sendLetterEmail({
-          to: letter.receiver_email,
-          senderName: letter.sender_name,
-          receiverName: letter.receiver_name,
-          messageType: letter.message_type,
-          letterId: letter.id,
-        })
-        console.log(`Email sent for letter ${letterId}`)
-      } catch (emailError) {
-        console.error(`Email failed for letter ${letterId}:`, emailError)
-        // Guardar flag para reintentar después si quieres
-        await sql`
-          UPDATE letters SET email_sent = false WHERE id = ${letterId}
-        `.catch(() => { })
-      }
+    } catch {
+      // after() no disponible
     }
 
+    // ✅ Fallback: usar waitUntil de Vercel
+    try {
+      const { waitUntil } = require("@vercel/functions")
+      waitUntil(processPayment(paymentId))
+      return NextResponse.json({ received: true })
+    } catch {
+      // waitUntil no disponible
+    }
+
+    // ✅ Último fallback: procesar inline pero con timeout safety
+    await processPayment(paymentId)
     return NextResponse.json({ received: true })
   } catch (error) {
     console.error("Webhook critical error:", error)
-    // ✅ Siempre retornar 200 para evitar reintentos infinitos
     return NextResponse.json({ received: true })
+  }
+}
+
+export async function GET() {
+  return NextResponse.json({ status: "ok" })
+}
+
+// =============================================
+// Procesamiento del pago
+// =============================================
+async function processPayment(paymentId: string) {
+  console.log(`[processPayment] Starting for ${paymentId}...`)
+
+  const { MercadoPagoConfig, Payment } = await import("mercadopago")
+  const { sql } = await import("@/lib/db")
+  const { sendLetterEmail } = await import("@/lib/email")
+
+  const token = process.env.MP_ACCESS_TOKEN
+  if (!token) {
+    console.error("MP_ACCESS_TOKEN not configured!")
+    return
+  }
+
+  // 1. Consultar MP API
+  console.log(`[processPayment] Fetching payment from MP API...`)
+  const mpClient = new MercadoPagoConfig({ accessToken: token })
+  const paymentClient = new Payment(mpClient)
+
+  let payment
+  try {
+    payment = await paymentClient.get({ id: Number(paymentId) })
+  } catch (mpError) {
+    console.error(`[processPayment] MP API error:`, mpError)
+    return
+  }
+
+  if (!payment) {
+    console.log(`[processPayment] Payment not found`)
+    return
+  }
+
+  console.log(`[processPayment] Status: ${payment.status}, Ref: ${payment.external_reference}`)
+
+  if (!payment.external_reference) {
+    console.log(`[processPayment] No external_reference, skipping`)
+    return
+  }
+
+  if (payment.status !== "approved") {
+    console.log(`[processPayment] Status is "${payment.status}", not approved. Skipping.`)
+    return
+  }
+
+  const letterId = payment.external_reference
+
+  // 2. Actualizar DB
+  console.log(`[processPayment] Updating DB for letter ${letterId}...`)
+  try {
+    const updateResult = await sql`
+      UPDATE letters
+      SET payment_status = 'paid',
+          mp_payment_id = ${paymentId},
+          status = 'sent'
+      WHERE id = ${letterId}
+        AND payment_status != 'paid'
+      RETURNING *
+    `
+
+    if (updateResult.length === 0) {
+      console.log(`[processPayment] Letter ${letterId} already processed or not found.`)
+      return
+    }
+
+    const letter = updateResult[0]
+    console.log(`[processPayment] Letter ${letterId} updated in DB.`)
+
+    // 3. Enviar email
+    console.log(`[processPayment] Sending email to ${letter.receiver_email}...`)
+    try {
+      await sendLetterEmail({
+        to: letter.receiver_email,
+        senderName: letter.sender_name,
+        receiverName: letter.receiver_name,
+        messageType: letter.message_type,
+        letterId: letter.id,
+      })
+      console.log(`[processPayment] ✅ Email sent for letter ${letterId}`)
+    } catch (emailError) {
+      console.error(`[processPayment] ❌ Email failed:`, emailError)
+    }
+  } catch (dbError) {
+    console.error(`[processPayment] ❌ DB error:`, dbError)
   }
 }
