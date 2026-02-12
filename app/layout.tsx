@@ -1,8 +1,6 @@
 import React from "react"
 import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display, Caveat, Dancing_Script } from 'next/font/google'
-import { PaddleLoader } from "@/components/paddle-loader"
-
 import './globals.css'
 
 const inter = Inter({
@@ -53,7 +51,6 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${playfair.variable} ${caveat.variable} ${dancingScript.variable} font-sans antialiased`}>
-        <PaddleLoader />
         {children}
       </body>
     </html>

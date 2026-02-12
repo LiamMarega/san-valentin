@@ -26,7 +26,7 @@ export default async function CartaPage({ params }: { params: Promise<{ id: stri
       music_url,
       COALESCE(is_premium, false) as is_premium,
       COALESCE(payment_status, 'free') as payment_status,
-      paddle_txn_id
+      mp_payment_id
     FROM letters 
     WHERE id = ${id}
   `

@@ -14,5 +14,5 @@ export interface LetterData {
   music_url: string | null
   is_premium: boolean
   payment_status: "free" | "pending" | "paid"
-  paddle_txn_id: string | null
+  mp_payment_id: string | null
 }

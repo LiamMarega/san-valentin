@@ -27,8 +27,7 @@ export default function RefundPage() {
 
         <article className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-muted-foreground">
           <p>
-            Our orders are processed by Paddle.com, our Merchant of Record and authorised reseller. The following
-            information summarises how refunds work for purchases made through Paddle.
+            Our payments are processed by MercadoPago. The following information summarises how refunds work for purchases made through our platform.
           </p>
 
           <section>
@@ -37,8 +36,7 @@ export default function RefundPage() {
             </h2>
             <p>
               If you are a Consumer, you may have the right to cancel your purchase and request a refund within{" "}
-              <strong>30 days</strong> from the day after the Transaction is completed. To exercise this right, you must clearly inform Paddle
-              (or us, so we can pass it on) of your decision to cancel within this 30-day period.
+              <strong>14 days</strong> from the day after the Transaction is completed. To exercise this right, you must clearly inform us of your decision to cancel within this period.
             </p>
           </section>
 
@@ -57,37 +55,23 @@ export default function RefundPage() {
 
           <section>
             <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              4. How to Request a Refund
+              3. How to Request a Refund
             </h2>
             <p>
-              For purchases processed by Paddle, refunds are ultimately handled at Paddle&apos;s discretion and in
-              accordance with their consumer terms. If you experience technical issues or believe you are entitled to a
-              refund, please contact{" "}
+              If you experience technical issues or believe you are entitled to a refund, please contact{" "}
               <a href="mailto:liammaregadevelop@gmail.com" className="text-primary hover:underline">
                 liammaregadevelop@gmail.com
-              </a>{" "}
-              or reach out directly to Paddle through their support channels. To help locate your order, please include the
-              email used at checkout and, if possible, your transaction ID or receipt.
+              </a>
+              . To help locate your order, please include the email used at checkout and, if possible, your payment ID or receipt.
             </p>
           </section>
 
           <section>
             <h2 className="font-serif text-lg font-semibold text-foreground mb-2">
-              5. Merchant of Record
+              4. Payment Processing
             </h2>
             <p>
-              Our order process is conducted by our online reseller Paddle.com. Paddle is the Merchant of Record for all our
-              orders and is responsible for payment processing, billing, applicable taxes and issuing refunds in line with
-              their{" "}
-              <a
-                href="https://www.paddle.com/legal/invoiced-consumer-terms"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Invoiced Consumer Terms and Conditions
-              </a>
-              .
+              Our payments are processed by MercadoPago. MercadoPago is responsible for payment processing and billing. Refunds are handled in accordance with our policies and applicable consumer protection laws.
             </p>
           </section>
         </article>

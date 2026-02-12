@@ -86,7 +86,7 @@ export default function PricingPage() {
                 <strong className="text-foreground">Carta PRO:</strong> Si eliges un tema PRO, se te pedirá un pago único de $1.00 USD por esa carta. Incluye temas con animaciones CSS/SVG, opción de subir una foto y programar el envío para una fecha y hora concretas (ideal para San Valentín).
               </p>
               <p>
-                Los pagos se procesan de forma segura a través de Paddle (Merchant of Record). No guardamos datos de tarjeta. Para reembolsos y condiciones, consulta nuestra{" "}
+                Los pagos se procesan de forma segura a través de MercadoPago. No guardamos datos de tarjeta. Para reembolsos y condiciones, consulta nuestra{" "}
                 <Link href="/refund" className="text-primary hover:underline">Refund Policy</Link> y{" "}
                 <Link href="/terms" className="text-primary hover:underline">Terms &amp; Conditions</Link>.
               </p>

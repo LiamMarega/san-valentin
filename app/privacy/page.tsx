@@ -36,7 +36,7 @@ export default function PrivacyPage() {
             </h2>
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>User Data:</strong> Name and email of the sender and recipient to provide the service.</li>
-              <li><strong>Payment Data:</strong> We do not store credit card details. All payments are processed securely by Paddle (our Merchant of Record).</li>
+              <li><strong>Payment Data:</strong> We do not store credit card details. All payments are processed securely by MercadoPago.</li>
               <li><strong>Usage Data:</strong> IP addresses and cookies for basic site functionality and security.</li>
             </ul>
           </section>

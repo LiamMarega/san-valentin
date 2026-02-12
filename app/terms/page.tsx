@@ -94,22 +94,13 @@ export default function TermsPage() {
             </p>
             <ul className="list-disc pl-6 space-y-1">
               <li>
-                <strong>Pagos:</strong> Nuestros pagos son procesados por Paddle.com, que actúa como Merchant of Record y distribuidor autorizado del Producto. Paddle gestiona el cobro, los impuestos aplicables y la emisión de facturas, y nosotros no almacenamos tus datos bancarios completos.
+                <strong>Pagos:</strong> Nuestros pagos son procesados por MercadoPago. MercadoPago gestiona el cobro, y nosotros no almacenamos tus datos bancarios completos.
               </li>
               <li>
                 <strong>Naturaleza del Bien:</strong> Al comprar una carta Premium, estás adquiriendo una licencia de uso de contenido digital.
               </li>
               <li>
-                <strong>Política de Reembolsos:</strong> Los pagos y reembolsos se gestionan de acuerdo con los Términos de Paddle para consumidores, disponibles en{" "}
-                <a
-                  href="https://www.paddle.com/legal/invoiced-consumer-terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  https://www.paddle.com/legal/invoiced-consumer-terms
-                </a>
-                . Si eres Consumidor, puedes tener derecho a cancelar tu compra y solicitar el reembolso dentro de los 14 días posteriores al día siguiente a la transacción, salvo en el caso de contenido digital que ya haya comenzado a descargarse, reproducirse o del cual ya hayas disfrutado, de acuerdo con la normativa aplicable y con la política de Paddle.
+                <strong>Política de Reembolsos:</strong> Los pagos y reembolsos se gestionan de acuerdo con nuestras políticas y las de MercadoPago. Si eres Consumidor, puedes tener derecho a cancelar tu compra y solicitar el reembolso dentro de los 14 días posteriores al día siguiente a la transacción, salvo en el caso de contenido digital del cual ya hayas disfrutado, de acuerdo con la normativa aplicable.
               </li>
               <li>
                 <strong>Cambios de Precio:</strong> Nos reservamos el derecho de modificar los precios de los servicios PRO en cualquier momento. Los cambios no afectarán a compras ya efectuadas.

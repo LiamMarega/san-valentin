@@ -20,7 +20,6 @@ import { THEMES, RELATIONSHIP_OPTIONS, getThemeById, isThemeLocked } from "@/con
 import type { ThemeId, RelationshipType } from "@/constants/themes"
 import { LetterPreview } from "@/components/letter-preview"
 import { cn } from "@/lib/utils"
-import { getPaddle } from "@/components/paddle-loader"
 import { trackEvent } from "@/lib/firebase"
 
 // =============================================================================
@@ -123,26 +122,24 @@ export function LetterForm() {
     return value.charAt(0).toUpperCase() + value.slice(1)
   }
 
-  function openPaddleCheckout(letterId: string, email: string) {
-    const paddle = getPaddle()
-    if (!paddle) {
-      setError("Error al cargar el sistema de pagos. Recargá la página.")
+  async function redirectToMercadoPago(letterId: string) {
+    try {
+      const res = await fetch("/api/create-preference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ letterId }),
+      })
+
+      if (!res.ok) {
+        throw new Error("Error creating payment preference")
+      }
+
+      const { init_point } = await res.json()
+      window.location.href = init_point
+    } catch {
+      setError("Error al iniciar el pago. Intenta de nuevo.")
       setIsSubmitting(false)
-      return
     }
-
-    paddle.Checkout.open({
-      items: [{ priceId: process.env.NEXT_PUBLIC_PADDLE_PRICE_ID!, quantity: 1 }],
-      customer: { email },
-      customData: { letterId },
-      settings: {
-        displayMode: "overlay",
-        successUrl: `${window.location.origin}/sent`,
-      },
-    })
-
-    // Paddle overlay maneja su propio estado, liberamos el botón
-    setIsSubmitting(false)
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -211,10 +208,10 @@ export function LetterForm() {
         is_premium: isPremium,
       })
 
-      // Si es premium -> abrir Paddle Checkout overlay
+      // Si es premium -> redirigir a MercadoPago Checkout
       if (isPremium) {
-        openPaddleCheckout(letterId, receiverEmail)
         trackEvent("letter_premium_checkout_opened")
+        await redirectToMercadoPago(letterId)
         return
       }
 

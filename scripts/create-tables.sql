@@ -29,7 +29,7 @@ ALTER TABLE letters ADD COLUMN IF NOT EXISTS relationship_type TEXT DEFAULT 'par
 ALTER TABLE letters ADD COLUMN IF NOT EXISTS photo_url TEXT;
 ALTER TABLE letters ADD COLUMN IF NOT EXISTS music_url TEXT;
 
--- v3 Paddle payment columns
+-- v3 Payment columns (MercadoPago)
 ALTER TABLE letters ADD COLUMN IF NOT EXISTS is_premium BOOLEAN DEFAULT FALSE;
 ALTER TABLE letters ADD COLUMN IF NOT EXISTS payment_status VARCHAR(50) DEFAULT 'free';
-ALTER TABLE letters ADD COLUMN IF NOT EXISTS paddle_txn_id VARCHAR(100);
+ALTER TABLE letters ADD COLUMN IF NOT EXISTS mp_payment_id VARCHAR(100);
