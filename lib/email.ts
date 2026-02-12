@@ -1,6 +1,4 @@
-import { Resend } from "resend"
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { sendEmailWithFallback } from "./email-providers"
 
 interface SendLetterEmailParams {
   to: string
@@ -122,20 +120,12 @@ export async function sendLetterEmail({
   const fromAddress =
     process.env.RESEND_FROM || "Carta Secreta <onboarding@resend.dev>"
 
-  console.log(`Sending email from ${fromAddress} to ${to} using Resend...`)
+  const subject = `💌 ${senderName} te escribió una carta sorpresa`
 
-  const { data, error } = await resend.emails.send({
-    from: fromAddress,
-    to,
-    subject: `💌 ${senderName} te escribió una carta sorpresa`,
-    html: htmlContent,
-  })
+  console.log(`Sending email to ${to} with fallback providers...`)
 
-  if (error) {
-    console.error("Resend error detail:", JSON.stringify(error, null, 2))
-    throw new Error(`Failed to send email: ${error.message}`)
-  }
+  const result = await sendEmailWithFallback(fromAddress, to, subject, htmlContent)
 
-  console.log("Resend response data:", JSON.stringify(data, null, 2))
-  return data
+  console.log(`Email sent via ${result.provider}`)
+  return result
 }
