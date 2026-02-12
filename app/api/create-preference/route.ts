@@ -74,7 +74,7 @@ export async function POST(req: Request) {
           pending: `https://www.valentinedayletter.com/sent?payment=pending`,
         },
         external_reference: letterId,
-        notification_url: `${baseUrl}/api/webhooks/mercadopago`,
+        notification_url: `https://www.valentinedayletter.com/api/webhooks/mercadopago`,
         statement_descriptor: "CartaSecreta",
       },
     })
