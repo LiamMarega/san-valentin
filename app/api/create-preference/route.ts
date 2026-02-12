@@ -64,7 +64,7 @@ export async function POST(req: Request) {
             id: letterId,
             title: `Carta Premium - De ${letter.sender_name} para ${letter.receiver_name}`,
             quantity: 1,
-            unit_price: 1,
+            unit_price: 0.2,
             currency_id: "USD",
           },
         ],
