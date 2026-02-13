@@ -1,5 +1,13 @@
-// Usage: npx tsx scripts/test-email-providers.ts tu-email@gmail.com
-import "dotenv/config"
+import path from "path"
+import { fileURLToPath } from "url"
+import * as dotenv from "dotenv"
+
+// Fix for ES modules
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Load .env from project root
+dotenv.config({ path: path.join(__dirname, "../.env") })
 
 const testEmail = process.argv[2]
 if (!testEmail) {
@@ -9,6 +17,38 @@ if (!testEmail) {
 
 const html = `<h2>Test email</h2><p>Si ves esto, el provider funciona correctamente.</p>`
 const subject = "Test - Carta Secreta Provider"
+
+// Parse "Name <email>" format from RESEND_FROM
+const fromRaw = process.env.RESEND_FROM || "Carta Secreta <noreply@valentinedayletter.com>"
+const fromMatch = fromRaw.match(/^(.+?)\s*<(.+?)>$/)
+const senderName = fromMatch ? fromMatch[1].trim() : "Carta Secreta Test"
+const senderEmail = fromMatch ? fromMatch[2] : (fromRaw.includes("@") ? fromRaw : "noreply@valentinedayletter.com")
+
+// ============ TEST RESEND ============
+async function testResend() {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) return console.log("RESEND: skipped (no API key)")
+
+  const { Resend } = await import("resend")
+  const resend = new Resend(apiKey)
+
+  try {
+    const { error } = await resend.emails.send({
+      from: fromRaw,
+      to: testEmail,
+      subject: `${subject} (Resend)`,
+      html,
+    })
+
+    if (error) {
+      console.error(`RESEND: FAILED - ${error.message}`)
+    } else {
+      console.log("RESEND: OK")
+    }
+  } catch (err: any) {
+    console.error(`RESEND: FAILED - ${err.message}`)
+  }
+}
 
 // ============ TEST BREVO ============
 async function testBrevo() {
@@ -23,7 +63,7 @@ async function testBrevo() {
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      sender: { name: "Carta Secreta Test", email: "noreply@valentinedayletter.com" },
+      sender: { name: senderName, email: senderEmail },
       to: [{ email: testEmail }],
       subject: `${subject} (Brevo)`,
       htmlContent: html,
@@ -34,7 +74,8 @@ async function testBrevo() {
     const err = await res.text()
     console.error(`BREVO: FAILED - ${res.status} ${err}`)
   } else {
-    console.log("BREVO: OK")
+    const data = await res.json()
+    console.log("BREVO: OK", data.messageId ? `(ID: ${data.messageId})` : "")
   }
 }
 
@@ -52,7 +93,7 @@ async function testGmail() {
 
   try {
     await transport.sendMail({
-      from: `"Carta Secreta Test" <${user}>`,
+      from: `"${senderName}" <${user}>`,
       to: testEmail,
       subject: `${subject} (Gmail)`,
       html,
@@ -80,7 +121,7 @@ async function testMailjet() {
     body: JSON.stringify({
       Messages: [
         {
-          From: { Email: "noreply@valentinedayletter.com", Name: "Carta Secreta Test" },
+          From: { Email: senderEmail, Name: senderName },
           To: [{ Email: testEmail }],
           Subject: `${subject} (Mailjet)`,
           HTMLPart: html,
@@ -94,19 +135,21 @@ async function testMailjet() {
     console.error(`MAILJET: FAILED - ${res.status} ${err}`)
   } else {
     const data = await res.json()
-    const status = data?.Messages?.[0]?.Status
-    if (status === "error") {
-      console.error(`MAILJET: FAILED - ${JSON.stringify(data.Messages[0].Errors)}`)
+    const msg = data?.Messages?.[0]
+    if (msg?.Status === "error") {
+      console.error(`MAILJET: FAILED - ${JSON.stringify(msg.Errors)}`)
     } else {
-      console.log(`MAILJET: OK (status: ${status})`)
+      console.log(`MAILJET: OK (Status: ${msg?.Status})`)
     }
   }
 }
 
 // ============ RUN ALL ============
 async function main() {
-  console.log(`\nTesting email providers -> ${testEmail}\n`)
+  console.log(`\nTesting email providers -> ${testEmail}`)
+  console.log(`Using sender: ${senderName} <${senderEmail}>\n`)
 
+  await testResend()
   await testBrevo()
   await testGmail()
   await testMailjet()

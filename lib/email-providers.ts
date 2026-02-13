@@ -137,9 +137,9 @@ interface Provider {
 
 const providers: Provider[] = [
   { name: "resend", send: sendWithResend },
-  { name: "brevo", send: sendWithBrevo },
-  { name: "gmail", send: sendWithGmail },
   { name: "mailjet", send: sendWithMailjet },
+  { name: "gmail", send: sendWithGmail },
+  { name: "brevo", send: sendWithBrevo },
 ]
 
 function isRateLimitError(error: unknown): boolean {
