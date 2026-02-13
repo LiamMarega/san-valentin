@@ -79,6 +79,13 @@ export async function POST(req: Request) {
       },
     })
 
+    await sql`
+      UPDATE letters
+      SET payment_method = 'mercadopago'
+      WHERE id = ${letterId}
+        AND payment_method IS NULL
+    `
+
     return NextResponse.json({
       init_point: result.init_point,
       preference_id: result.id,

@@ -15,4 +15,6 @@ export interface LetterData {
   is_premium: boolean
   payment_status: "free" | "pending" | "paid"
   mp_payment_id: string | null
+  payment_method: "mercadopago" | "paypal" | null
+  paypal_order_id: string | null
 }

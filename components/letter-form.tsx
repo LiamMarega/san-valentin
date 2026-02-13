@@ -22,6 +22,8 @@ import { LetterPreview } from "@/components/letter-preview"
 import { cn } from "@/lib/utils"
 import { trackEvent } from "@/lib/firebase"
 import { LimitModal } from "@/components/limit-modal"
+import { PayPalCheckoutModal } from "@/components/paypal-checkout-modal"
+import { getPaymentProvider, type PaymentProvider } from "@/lib/country-detection"
 
 
 // =============================================================================
@@ -107,6 +109,13 @@ export function LetterForm() {
   const [isScheduled, setIsScheduled] = useState(false)
   const [userTimezone, setUserTimezone] = useState("")
 
+  // Payment provider (detected by timezone)
+  const [paymentProvider, setPaymentProvider] = useState<PaymentProvider>("mercadopago")
+
+  // PayPal inline checkout
+  const [isPayPalModalOpen, setIsPayPalModalOpen] = useState(false)
+  const [pendingLetterId, setPendingLetterId] = useState("")
+
   // Message type
   const [messageType, setMessageType] = useState("")
   const CUSTOM_VALUE = "__custom__"
@@ -118,6 +127,7 @@ export function LetterForm() {
   useEffect(() => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
     setUserTimezone(tz)
+    setPaymentProvider(getPaymentProvider(tz))
 
     // Formulario cargado
     trackEvent("letter_form_view", {
@@ -148,6 +158,12 @@ export function LetterForm() {
       setError("Error al iniciar el pago. Intenta de nuevo.")
       setIsSubmitting(false)
     }
+  }
+
+  function openPayPalCheckout(letterId: string) {
+    setPendingLetterId(letterId)
+    setIsPayPalModalOpen(true)
+    setIsSubmitting(false)
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -197,6 +213,7 @@ export function LetterForm() {
       theme: selectedTheme,
       relationship_type: relationshipType,
       custom_content: customContent,
+      payment_method: paymentProvider,
     }
 
     if (isScheduled) {
@@ -231,10 +248,16 @@ export function LetterForm() {
         is_premium: isPremium,
       })
 
-      // Si es premium -> redirigir a MercadoPago Checkout
+      // Si es premium -> redirigir al checkout correspondiente
       if (isPremium) {
-        trackEvent("letter_premium_checkout_opened")
-        await redirectToMercadoPago(letterId)
+        trackEvent("letter_premium_checkout_opened", {
+          payment_provider: paymentProvider,
+        })
+        if (paymentProvider === "paypal") {
+          openPayPalCheckout(letterId)
+        } else {
+          await redirectToMercadoPago(letterId)
+        }
         return
       }
 
@@ -588,6 +611,20 @@ export function LetterForm() {
           } catch (e) {
             console.error("Error clearing localStorage:", e)
           }
+        }}
+      />
+
+      <PayPalCheckoutModal
+        isOpen={isPayPalModalOpen}
+        letterId={pendingLetterId}
+        onClose={() => {
+          setIsPayPalModalOpen(false)
+          setPendingLetterId("")
+        }}
+        onSuccess={(letterId) => {
+          setIsPayPalModalOpen(false)
+          trackEvent("letter_sent_paypal")
+          router.push(`/sent?id=${letterId}`)
         }}
       />
     </div>

@@ -21,6 +21,8 @@ export async function POST(req: Request) {
       relationship_type = "pareja",
       photo_url = null,
       music_url = null,
+      // v4 payment provider
+      payment_method = null,
     } = body
 
     // Determinar si es premium basándose en el tema
@@ -38,14 +40,14 @@ export async function POST(req: Request) {
           id, sender_name, receiver_name, receiver_email, message_type,
           status, timezone, scheduled_at, created_at,
           theme, custom_content, relationship_type, photo_url, music_url,
-          is_premium, payment_status
+          is_premium, payment_status, payment_method
         ) VALUES (
           ${letterId}, ${sender_name}, ${receiver_name}, ${receiver_email}, ${message_type},
           'pending', ${timezone},
           (${scheduled_at}::timestamp AT TIME ZONE ${timezone}),
           NOW(),
           ${theme}, ${custom_content}, ${relationship_type}, ${photo_url}, ${music_url},
-          ${is_premium}, ${payment_status}
+          ${is_premium}, ${payment_status}, ${payment_method}
         )
       `
     } else {
@@ -57,12 +59,12 @@ export async function POST(req: Request) {
           id, sender_name, receiver_name, receiver_email, message_type,
           status, created_at,
           theme, custom_content, relationship_type, photo_url, music_url,
-          is_premium, payment_status
+          is_premium, payment_status, payment_method
         ) VALUES (
           ${letterId}, ${sender_name}, ${receiver_name}, ${receiver_email}, ${message_type},
           ${status}, NOW(),
           ${theme}, ${custom_content}, ${relationship_type}, ${photo_url}, ${music_url},
-          ${is_premium}, ${payment_status}
+          ${is_premium}, ${payment_status}, ${payment_method}
         )
       `
 
