@@ -31,12 +31,14 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
   return (
-    <main className="min-h-screen relative overflow-x-hidden flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-screen relative flex flex-col items-center justify-center px-4 py-12">
       {/* Floral decorations */}
-      <FloralTopLeft className="absolute top-0 left-0 w-48 h-48 md:w-72 md:h-72 opacity-80 pointer-events-none -translate-x-8 -translate-y-8" />
-      <FloralBottomRight className="absolute bottom-0 right-0 w-48 h-48 md:w-72 md:h-72 opacity-80 pointer-events-none translate-x-8 translate-y-8" />
-      <FloralSmall className="absolute top-20 right-10 w-16 h-16 opacity-50 pointer-events-none animate-float hidden md:block" />
-      <FloralSmall className="absolute bottom-32 left-10 w-12 h-12 opacity-40 pointer-events-none animate-float hidden md:block" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <FloralTopLeft className="absolute top-0 left-0 w-48 h-48 md:w-72 md:h-72 opacity-80 -translate-x-8 -translate-y-8" />
+        <FloralBottomRight className="absolute bottom-0 right-0 w-48 h-48 md:w-72 md:h-72 opacity-80 translate-x-8 translate-y-8" />
+        <FloralSmall className="absolute top-20 right-10 w-16 h-16 opacity-50 animate-float hidden md:block" />
+        <FloralSmall className="absolute bottom-32 left-10 w-12 h-12 opacity-40 animate-float hidden md:block" />
+      </div>
 
       {/* Main card */}
       <div className="relative z-10 w-full max-w-6xl">
