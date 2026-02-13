@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { FloralTopLeft, FloralBottomRight, FloralSmall } from "@/components/floral-decorations"
 import { Heart, CheckCircle, PenLine, Home, CalendarClock, Sparkles } from "lucide-react"
+import { SenderEmailForm } from "@/components/sender-email-form"
 
 const MONTHS_ES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 
@@ -15,7 +16,7 @@ export const metadata = {
   title: "Carta enviada - Carta Secreta",
 }
 
-type SentPageProps = { searchParams: Promise<{ scheduled?: string; date?: string; time?: string }> }
+type SentPageProps = { searchParams: Promise<{ scheduled?: string; date?: string; time?: string; id?: string }> }
 
 export default async function SentPage({ searchParams }: SentPageProps) {
   const params = await searchParams
@@ -91,6 +92,13 @@ export default async function SentPage({ searchParams }: SentPageProps) {
           </div>
 
           <div className="mt-12 space-y-8">
+            {/* Sender Email Form */}
+            {params.id && (
+              <div className="mb-8 w-full">
+                <SenderEmailForm letterId={params.id} />
+              </div>
+            )}
+
             {/* Post-envío Upsell */}
             <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 text-center shadow-sm">
               <h3 className="font-semibold text-lg text-amber-800 mb-2">

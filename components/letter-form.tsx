@@ -254,11 +254,11 @@ export function LetterForm() {
       if (isScheduled) {
         const date = formData.get("scheduled_date") as string
         const time = formData.get("scheduled_time") as string
-        const params = new URLSearchParams({ scheduled: "1", date, time })
+        const params = new URLSearchParams({ scheduled: "1", date, time, id: letterId })
         router.push(`/sent?${params.toString()}`)
         trackEvent("letter_sent_scheduled")
       } else {
-        router.push("/sent")
+        router.push(`/sent?id=${letterId}`)
         trackEvent("letter_sent_immediate")
       }
     } catch {
@@ -581,6 +581,14 @@ export function LetterForm() {
       <LimitModal
         isOpen={isLimitModalOpen}
         onClose={() => setIsLimitModalOpen(false)}
+        onUnlock={() => {
+          try {
+            window.localStorage.removeItem("love_letter_sent")
+            setIsLimitModalOpen(false)
+          } catch (e) {
+            console.error("Error clearing localStorage:", e)
+          }
+        }}
       />
     </div>
   )

@@ -15,9 +15,10 @@ import { motion } from "framer-motion"
 interface LimitModalProps {
     isOpen: boolean
     onClose: () => void
+    onUnlock: () => void
 }
 
-export function LimitModal({ isOpen, onClose }: LimitModalProps) {
+export function LimitModal({ isOpen, onClose, onUnlock }: LimitModalProps) {
     return (
         <Dialog open={isOpen} onOpenChange={(open) => {
             // Prevents closing when clicking outside as per requirement
@@ -64,6 +65,7 @@ export function LimitModal({ isOpen, onClose }: LimitModalProps) {
                         <Button
                             asChild
                             className="w-full h-12 text-base font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:opacity-90 transition-all shadow-lg border-none"
+                            onClick={onUnlock}
                         >
                             <a
                                 href="https://www.instagram.com/liammdev/"
