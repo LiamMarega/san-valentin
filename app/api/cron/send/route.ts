@@ -32,7 +32,7 @@ export async function GET(req: Request) {
     // 2. Iterar y enviar
     for (const letter of lettersToSend) {
       try {
-        await sendLetterEmail({
+        const result = await sendLetterEmail({
           to: letter.receiver_email,
           senderName: letter.sender_name,
           receiverName: letter.receiver_name,
@@ -40,10 +40,12 @@ export async function GET(req: Request) {
           letterId: letter.id
         })
 
-        // 3. Marcar como enviada
+        // 3. Marcar como enviada y guardar proveedor
         await sql`
           UPDATE letters 
-          SET status = 'sent', sent_at = NOW() 
+          SET status = 'sent', 
+              sent_at = NOW(),
+              email_provider = ${result.provider}
           WHERE id = ${letter.id}
         `
         results.success++
@@ -57,10 +59,10 @@ export async function GET(req: Request) {
       }
     }
 
-    return NextResponse.json({ 
-      message: "Cron job executed", 
+    return NextResponse.json({
+      message: "Cron job executed",
       processed: lettersToSend.length,
-      ...results 
+      ...results
     })
 
   } catch (error) {

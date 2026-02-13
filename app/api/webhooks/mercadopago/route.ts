@@ -136,14 +136,23 @@ async function processPayment(paymentId: string) {
     // 3. Enviar email
     console.log(`[processPayment] Sending email to ${letter.receiver_email}...`)
     try {
-      await sendLetterEmail({
+      const result = await sendLetterEmail({
         to: letter.receiver_email,
         senderName: letter.sender_name,
         receiverName: letter.receiver_name,
         messageType: letter.message_type,
         letterId: letter.id,
       })
-      console.log(`[processPayment] ✅ Email sent for letter ${letterId}`)
+
+      if (result?.provider) {
+        await sql`
+          UPDATE letters 
+          SET email_provider = ${result.provider}
+          WHERE id = ${letter.id}
+        `
+      }
+
+      console.log(`[processPayment] ✅ Email sent for letter ${letterId} via ${result.provider}`)
     } catch (emailError) {
       console.error(`[processPayment] ❌ Email failed:`, emailError)
     }

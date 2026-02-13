@@ -68,13 +68,22 @@ export async function POST(req: Request) {
 
       // Solo enviamos el email si NO es premium (las premium esperan al webhook)
       if (!is_premium) {
-        await sendLetterEmail({
+        const result = await sendLetterEmail({
           to: receiver_email,
           senderName: sender_name,
           receiverName: receiver_name,
           messageType: message_type,
           letterId: letterId,
         })
+
+        // Guardamos con qué proveedor se envió
+        if (result?.provider) {
+          await sql`
+            UPDATE letters 
+            SET email_provider = ${result.provider}
+            WHERE id = ${letterId}
+          `
+        }
       }
     }
 

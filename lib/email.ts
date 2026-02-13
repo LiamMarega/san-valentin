@@ -126,6 +126,9 @@ export async function sendLetterEmail({
 
   const result = await sendEmailWithFallback(fromAddress, to, subject, htmlContent)
 
+  // Analytics logging
+  console.log(`[analytics] event: email_sent, provider: ${result.provider}, letterId: ${letterId}`)
+
   console.log(`Email sent via ${result.provider}`)
   return result
 }
