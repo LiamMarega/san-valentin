@@ -58,7 +58,7 @@ export function SenderEmailForm({ letterId }: { letterId: string }) {
                     >
                         <div className="flex flex-col gap-2">
                             <label htmlFor="sender-email" className="text-xs font-medium text-muted-foreground ml-1">
-                                ¿Querés guardar una copia en tu historial?
+                                Por último, vincular tu correo electrónico con esta carta.
                             </label>
                             <div className="relative flex items-center">
                                 <Mail className="absolute left-3 w-4 h-4 text-muted-foreground pointer-events-none" />

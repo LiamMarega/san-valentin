@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     setMounted(true)
     // Inicializar con un número aleatorio entre 5 y 20
-    setVisitorCount(Math.floor(Math.random() * (20 - 5 + 1)) + 5)
+    setVisitorCount(Math.floor(Math.random() * (15 - 2 + 1)) + 2)
 
     // Inicializa analytics para la sesión y registra la vista de la home
     initAnalytics()
