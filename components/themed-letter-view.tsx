@@ -27,7 +27,7 @@ export function ThemedLetterView({ letter }: ThemedLetterViewProps) {
     scrapbook: ScrapbookLetterView,
     editorial: EditorialLetterView,
     midnight: MidnightLetterView,
-    romantic_pro: ClassicLetterView,
+    romantic_pro: RomanticProLetterView,
   }
 
   const Renderer = renderers[theme.id] ?? ClassicLetterView
@@ -574,6 +574,139 @@ function MidnightLetterView({ letter }: ThemedLetterViewProps) {
       {/* Side lines */}
       <div className="hidden lg:block absolute top-1/2 left-10 -translate-y-1/2 w-px h-64 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
       <div className="hidden lg:block absolute top-1/2 right-10 -translate-y-1/2 w-px h-64 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+    </main>
+  )
+}
+
+// =============================================================================
+// 5. ROMÁNTICO PRO (PREMIUM)
+// =============================================================================
+function RomanticProLetterView({ letter }: ThemedLetterViewProps) {
+  return (
+    <main
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+      style={{
+        backgroundColor: "#F8EFE4",
+        backgroundImage: "url('https://www.transparenttextures.com/patterns/linen.png')",
+      }}
+    >
+      {/* Rain of Hearts (Background) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: "100vh", opacity: [0, 1, 0] }}
+            transition={{
+              duration: Math.random() * 5 + 5,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "linear",
+            }}
+            className="absolute text-[#E29595]/30"
+            style={{
+              left: `${Math.random() * 100}%`,
+              fontSize: `${Math.random() * 20 + 10}px`,
+            }}
+          >
+            ❤
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="relative z-10 w-full max-w-3xl">
+        <div className="flex flex-col lg:flex-row gap-8 items-center">
+          {/* Main Card */}
+          <div className="flex-1 relative">
+            {/* Handcrafted edge effect */}
+            <div className="absolute inset-0 bg-[#DBC7B5] transform translate-y-2 translate-x-2 rounded-lg" />
+
+            <div className="relative bg-[#FFF9F2] p-8 md:p-12 rounded-lg shadow-xl border border-[#DBC7B5] overflow-hidden">
+              {/* Decorative corners */}
+              <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-[#C14E4E]/20 rounded-tl-lg" />
+              <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-[#C14E4E]/20 rounded-tr-lg" />
+              <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-[#C14E4E]/20 rounded-bl-lg" />
+              <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-[#C14E4E]/20 rounded-br-lg" />
+
+              <div className="text-center relative z-10">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#F4E4E4] mb-6">
+                  <Heart className="w-6 h-6 text-[#C14E4E]" fill="currentColor" />
+                </div>
+
+                <h1 className="font-serif font-bold text-3xl md:text-5xl text-[#3D2B1F] mb-2 tracking-wide">
+                  Querida, {letter.receiver_name}
+                </h1>
+
+                <div className="flex items-center justify-center gap-4 mb-8">
+                  <div className="h-px w-12 bg-[#C14E4E]/30" />
+                  <span className="text-xs font-serif text-[#C14E4E] uppercase tracking-widest">
+                    Una carta especial
+                  </span>
+                  <div className="h-px w-12 bg-[#C14E4E]/30" />
+                </div>
+
+                <p className="font-sans text-[#3D2B1F]/60 text-sm uppercase tracking-wider mb-8">
+                  {letter.sender_name} ha escrito esto para ti...
+                </p>
+
+                {/* Custom Content */}
+                {letter.custom_content && (
+                  <div className="relative mb-10 text-left bg-white/50 p-6 rounded-lg border border-[#DBC7B5]/30">
+                    <Sparkles className="absolute -top-3 -right-3 text-[#C14E4E]/40 w-6 h-6" />
+                    <div className="font-handwritten text-xl md:text-2xl text-[#3D2B1F] leading-loose">
+                      {letter.custom_content}
+                    </div>
+                  </div>
+                )}
+
+                {/* Question */}
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="mb-12 py-8 border-y border-[#DBC7B5]/30"
+                >
+                  <QuestionDisplay
+                    messageType={letter.message_type}
+                    className="font-serif text-4xl md:text-6xl font-black text-[#C14E4E] leading-none"
+                    accentClass="block text-2xl md:text-3xl font-light text-[#3D2B1F] mt-2 italic"
+                  />
+                </motion.div>
+
+                {/* Buttons */}
+                <LetterButtons letterId={letter.id} themeId="romantic_pro" />
+              </div>
+            </div>
+          </div>
+
+          {/* Photo (Floats on desktop, stacks on mobile) */}
+          {letter.photo_url && (
+            <div className="w-64 relative transform hover:rotate-2 transition-transform duration-500">
+              <div className="absolute inset-0 bg-[#3D2B1F] transform translate-y-3 translate-x-3" />
+              <div className="relative bg-white p-3 pb-12 shadow-2xl border border-[#DBC7B5]">
+                <div className="aspect-[3/4] overflow-hidden bg-[#F8EFE4]">
+                  <img
+                    src={letter.photo_url}
+                    alt="Nosotros"
+                    className="w-full h-full object-cover filter contrast-[1.1] sepia-[0.2]"
+                  />
+                </div>
+                <div className="absolute bottom-4 left-0 w-full text-center">
+                  <span className="font-handwritten text-2xl text-[#3D2B1F]">Forever</span>
+                </div>
+                {/* Tape effect */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/30 backdrop-blur-sm transform -rotate-2 border-l border-r border-white/40 opacity-80" />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <footer className="mt-12 text-center">
+          <p className="font-serif italic text-[#3D2B1F]/40 text-sm">
+            &quot;El amor no se mira, se siente.&quot; — Pablo Neruda
+          </p>
+        </footer>
+      </div>
     </main>
   )
 }

@@ -27,7 +27,7 @@ export function ThemedCelebration({ letter }: ThemedCelebrationProps) {
     scrapbook: ScrapbookCelebration,
     editorial: EditorialCelebration,
     midnight: MidnightCelebration,
-    romantic_pro: ClassicCelebration,
+    romantic_pro: RomanticProCelebration,
   }
 
   const Renderer = renderers[theme.id] ?? ClassicCelebration
@@ -446,6 +446,93 @@ function MidnightCelebration({ letter }: ThemedCelebrationProps) {
 
       <div className="hidden lg:block absolute top-1/2 left-10 -translate-y-1/2 w-px h-64 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
       <div className="hidden lg:block absolute top-1/2 right-10 -translate-y-1/2 w-px h-64 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+    </main>
+  )
+}
+
+// =============================================================================
+// 5. ROMÁNTICO PRO (PREMIUM) — Celebration
+// =============================================================================
+function RomanticProCelebration({ letter }: ThemedCelebrationProps) {
+  return (
+    <main
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+      style={{
+        backgroundColor: "#F8EFE4",
+        backgroundImage: "url('https://www.transparenttextures.com/patterns/linen.png')",
+      }}
+    >
+      <HeartConfetti />
+
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#C14E4E]/5 rounded-full blur-3xl pointer-events-none transform translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#E29595]/5 rounded-full blur-3xl pointer-events-none transform -translate-x-1/2 translate-y-1/2" />
+
+      <div className="relative z-10 w-full max-w-2xl text-center">
+
+        {/* Main Card */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="bg-[#FFF9F2] p-8 md:p-14 rounded-t-full rounded-b-[1000px] shadow-2xl border-[8px] border-double border-[#DBC7B5] relative overflow-hidden"
+        >
+          {/* Inner border */}
+          <div className="absolute inset-4 rounded-t-full rounded-b-[1000px] border border-[#C14E4E]/10 pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col items-center">
+
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+              className="mb-8 relative"
+            >
+              <div className="absolute inset-0 bg-[#C14E4E] blur-xl opacity-20" />
+              <div className="w-24 h-24 bg-[#C14E4E] rounded-full flex items-center justify-center shadow-lg text-white">
+                <Heart className="w-12 h-12" fill="currentColor" />
+              </div>
+              <Sparkles className="absolute -top-2 -right-2 text-[#E29595] w-8 h-8 animate-pulse" />
+            </motion.div>
+
+            <span className="font-serif text-[#C14E4E] text-sm tracking-[0.3em] uppercase mb-4 block">
+              ¡She Said Yes!
+            </span>
+
+            <h1 className="font-serif font-black text-4xl md:text-6xl text-[#3D2B1F] mb-6 leading-none">
+              ¡Dijo que <span className="text-[#C14E4E] italic font-light">Sí!</span>
+            </h1>
+
+            <p className="font-handwritten text-2xl text-[#3D2B1F]/70 mb-8 max-w-md">
+              {letter.sender_name} estallará de felicidad al saberlo.
+            </p>
+
+            {letter.photo_url && (
+              <div className="mb-8 relative max-w-xs mx-auto transform -rotate-3">
+                <div className="absolute inset-0 bg-[#3D2B1F] transform translate-y-2 translate-x-2 rounded-sm" />
+                <div className="relative bg-white p-2 pb-8 shadow-lg border border-[#DBC7B5] rounded-sm">
+                  <img
+                    src={letter.photo_url}
+                    alt="Celebration"
+                    className="w-full aspect-square object-cover filter contrast-[1.05] sepia-[0.1]"
+                  />
+                  <p className="absolute bottom-2 inset-x-0 font-handwritten text-lg text-center text-gray-500">Love u</p>
+                </div>
+              </div>
+            )}
+
+            <CreateOwnCTA textColor="text-[#3D2B1F]/40" btnClass="bg-[#C14E4E] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all" />
+
+          </div>
+        </motion.div>
+
+        <div className="mt-8">
+          <p className="font-serif text-[#3D2B1F]/40 italic text-sm">
+            Made with eternal love for <a href="https://www.instagram.com/liammdev/" className="underline decoration-[#C14E4E]/30 hover:text-[#C14E4E]">@LiammDev</a>
+          </p>
+        </div>
+
+      </div>
     </main>
   )
 }
