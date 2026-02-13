@@ -111,7 +111,7 @@ export default function Home() {
               <h3 className="font-semibold text-lg mb-1">Gratis</h3>
               <p className="text-2xl font-bold mb-4">$0</p>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2">✅ 2 temas básicos</li>
+                <li className="flex items-center gap-2">✅ 1 tema básico</li>
                 <li className="flex items-center gap-2">✅ Envío por email</li>
                 <li className="flex items-center gap-2">✅ Programar envío</li>
                 <li className="flex items-center gap-2 opacity-40">❌ Temas exclusivos</li>
