@@ -311,112 +311,92 @@ function ClassicTemplate({
 }
 
 // =============================================================================
-// 2. EDITORIAL MINIMALISTA
+// 3. EDITORIAL MINIMALISTA (NEWSPAPER STYLE)
 // =============================================================================
 function EditorialTemplate({
   senderName,
   receiverName,
   messageType,
   customContent,
+  compact,
 }: LetterTemplateProps) {
   const displayName = receiverName || "Beloved"
   const displaySender = senderName || "Yours"
-  const displayMessage = messageType || "A timeless sentiment"
+  const displayMessage = messageType || "Extra! Extra!"
   const displayContent =
     customContent ||
-    "Curate a timeless digital sentiment for your beloved. Simplicity is the ultimate sophistication."
+    "In a stunning turn of events, cupid has struck again. The world stops as two hearts beat in unison, creating a headline for the ages."
+
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 
   return (
-    <div className="bg-white text-[#1A1A1A] font-sans antialiased">
-      {/* Minimal nav */}
-      <div className="px-6 py-5 flex justify-between items-center border-b border-gray-100">
-        <span className="text-[10px] uppercase tracking-[0.2em] font-light text-gray-400">
-          Valentine&apos;s Editorial
-        </span>
-        <div className="flex space-x-8">
-          <span className="text-[10px] uppercase tracking-[0.15em] text-[#CC7A6F]">Compose</span>
-        </div>
-      </div>
+    <div className={`relative bg-[#F9F7F1] text-[#1A1A1A] font-serif overflow-hidden ${compact ? "scale-[0.6] origin-top-left" : ""}`}>
+      {/* Texture overlay */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')]" />
 
-      {/* Title */}
-      <div className="text-center py-10 px-6">
-        <h1 className="font-serif font-light text-4xl md:text-5xl tracking-tight text-[#1A1A1A] italic mb-3">
-          The Love Note
-        </h1>
-        <p className="font-sans font-light text-xs text-gray-400 uppercase tracking-[0.2em]">
-          For {displayName}
-        </p>
-      </div>
+      <div className="relative z-10 p-6 md:p-8 flex flex-col h-full border-t-8 border-double border-[#1A1A1A]">
 
-      {/* Grid layout */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 px-6 pb-10 items-start">
-        {/* Left steps */}
-        <div className="md:col-span-4 md:text-right space-y-6">
-          <div>
-            <span className="block text-[10px] uppercase tracking-[0.2em] text-[#CC7A6F] font-medium">
-              Step 01
-            </span>
-            <h3 className="font-serif text-xl text-[#1A1A1A]">Visual Narrative</h3>
-            <p className="font-sans font-extralight text-xs text-gray-500 leading-relaxed mt-1">
-              Minimalism speaks volumes.
-            </p>
+        {/* Masthead */}
+        <header className="border-b-4 border-[#1A1A1A] mb-4 pb-2 text-center">
+          <div className="flex items-center justify-center gap-4 mb-2">
+            <div className="h-[1px] bg-[#1A1A1A] flex-grow" />
+            <span className="text-[10px] uppercase tracking-widest font-sans font-bold">EST. 2024</span>
+            <div className="h-[1px] bg-[#1A1A1A] flex-grow" />
           </div>
-          <div className="hidden md:block w-px h-12 bg-gray-200 ml-auto" />
-          <div className="opacity-40">
-            <span className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-medium">
-              Step 02
-            </span>
-            <h3 className="font-serif text-xl text-[#1A1A1A]">The Dedication</h3>
+          <h1 className="font-serif text-4xl md:text-6xl font-black tracking-tight uppercase leading-none transform scale-y-110 mb-2">
+            The Love Chronicle
+          </h1>
+          <div className="flex justify-between items-center border-t border-b border-[#1A1A1A] py-1 mt-2 text-[10px] md:text-xs font-sans font-bold uppercase tracking-wider">
+            <span>Vol. 14 • No. 02</span>
+            <span>{today}</span>
+            <span>Price: One Heart</span>
           </div>
-        </div>
+        </header>
 
-        {/* Center — upload portrait */}
-        {/* Center — upload portrait (HIDDEN PRO FEATURE) */}
-        {/* <div className="md:col-span-4 flex justify-center relative">
-          <div className="w-full max-w-[280px] aspect-square bg-[#FAFAFA] border border-gray-200 flex flex-col items-center justify-center relative group">
-            
-            <div className="absolute top-3 left-3 w-2 h-2 border-l border-t border-gray-300" />
-            <div className="absolute top-3 right-3 w-2 h-2 border-r border-t border-gray-300" />
-            <div className="absolute bottom-3 left-3 w-2 h-2 border-l border-b border-gray-300" />
-            <div className="absolute bottom-3 right-3 w-2 h-2 border-r border-b border-gray-300" />
-
-            <ImagePlus className="w-8 h-8 text-gray-300 mb-3" />
-            <span className="font-serif text-lg text-gray-400 italic">Upload Portrait</span>
-            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-300 mt-1">Max 5MB</span>
+        {/* Main Content */}
+        <article className="flex-grow flex flex-col gap-6">
+          {/* Headline */}
+          <div className="text-center mb-2">
+            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight uppercase italic">
+              {displayMessage}
+            </h2>
+            <div className="w-24 h-1 bg-[#1A1A1A] mx-auto mt-4" />
           </div>
-          {isFeatureLocked("uploadPhoto") && <PremiumOverlay label="Upload — Premium" />}
-        </div> */}
 
-        {/* Right — content */}
-        <div className="md:col-span-4 space-y-6">
-          <div>
-            <span className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-1 font-medium">
-              Recipient
-            </span>
-            <p className="text-lg font-serif text-[#1A1A1A] border-b border-gray-200 pb-1">
-              {displayName}
-            </p>
+          {/* Sub-headline / Byline */}
+          <div className="flex justify-center items-center gap-2 font-sans text-xs md:text-sm font-bold uppercase tracking-wide text-gray-600 mb-4">
+            <span className="text-[#CC7A6F]">EXCLUSIVE REPORT</span>
+            <span>•</span>
+            <span>By {displaySender}</span>
           </div>
-          <div>
-            <span className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-1 font-medium">
-              Message
-            </span>
-            <p className="text-sm font-sans font-light text-gray-600 leading-relaxed">
+
+          {/* Body Text - 2 Columns on MD */}
+          <div className="columns-1 md:columns-2 gap-8 text-justify font-serif text-sm md:text-base leading-relaxed">
+            <p className="first-letter:float-left first-letter:text-5xl first-letter:font-bold first-letter:mr-3 first-letter:mt-[-4px] first-letter:font-serif">
               {displayContent}
             </p>
+            <p className="mt-4 indent-8">
+              Reliable sources confirm that {displayName} has been identified as the primary suspect in the case of the stolen heart. Witnesses report seeing a radiant smile and undeniable charm. Authorities advise surrendering to the feeling immediately.
+            </p>
           </div>
-          <div className="border-t border-gray-100 pt-4">
-            <p className="font-serif text-xl text-[#1A1A1A] italic">{displayMessage}</p>
-            <p className="text-xs text-gray-400 mt-1">— {displaySender}</p>
-          </div>
-        </div>
-      </div>
+        </article>
 
-      {/* Footer quote */}
-      <div className="py-6 text-center border-t border-gray-100">
-        <p className="font-serif italic text-gray-300 text-sm">
-          &ldquo;Simplicity is the ultimate sophistication.&rdquo;
-        </p>
+        {/* Footer / CTA Area */}
+        <footer className="mt-8 border-t-2 border-[#1A1A1A] pt-4 flex flex-col items-center">
+          <div className="flex items-center gap-2 mb-2">
+            <Star className="w-4 h-4 text-[#1A1A1A]" fill="currentColor" />
+            <Star className="w-4 h-4 text-[#1A1A1A]" fill="currentColor" />
+            <Star className="w-4 h-4 text-[#1A1A1A]" fill="currentColor" />
+          </div>
+          <p className="font-sans text-[10px] uppercase tracking-widest text-gray-500">
+            Continued on Page Infinity
+          </p>
+        </footer>
       </div>
     </div>
   )

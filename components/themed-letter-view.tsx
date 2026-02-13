@@ -27,6 +27,7 @@ export function ThemedLetterView({ letter }: ThemedLetterViewProps) {
     scrapbook: ScrapbookLetterView,
     editorial: EditorialLetterView,
     midnight: MidnightLetterView,
+    romantic_pro: ClassicLetterView,
   }
 
   const Renderer = renderers[theme.id] ?? ClassicLetterView
@@ -326,91 +327,133 @@ function ScrapbookLetterView({ letter }: ThemedLetterViewProps) {
 }
 
 // =============================================================================
-// 3. EDITORIAL MINIMALISTA
+// 3. EDITORIAL MINIMALISTA (NEWSPAPER STYLE)
 // =============================================================================
 function EditorialLetterView({ letter }: ThemedLetterViewProps) {
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+
   return (
-    <main className="min-h-screen bg-white text-[#1A1A1A] font-sans antialiased flex flex-col">
-      {/* Nav */}
-      <nav className="w-full px-8 py-8 md:px-16 flex justify-between items-center border-b border-gray-100">
-        <span className="text-xs uppercase tracking-[0.2em] font-light text-gray-400">Valentine&apos;s Editorial</span>
-        <div className="flex space-x-8">
-          <span className="text-xs uppercase tracking-[0.15em] text-[#CC7A6F] border-b border-[#CC7A6F] pb-1">Letter</span>
-        </div>
-      </nav>
+    <main className="min-h-screen bg-[#F9F7F1] text-[#1A1A1A] font-serif antialiased flex flex-col items-center py-12 px-4 md:px-8">
+      {/* Texture overlay */}
+      <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')]" />
 
-      <div className="flex-grow flex flex-col items-center justify-center px-6 py-16">
-        <div className="w-full max-w-3xl">
-          {/* Title */}
-          <div className="text-center mb-16">
-            <h1 className="font-serif font-light text-5xl md:text-7xl tracking-tight text-[#1A1A1A] italic mb-4">
-              A Letter For You
-            </h1>
-            <p className="text-xs text-gray-400 uppercase tracking-[0.2em]">
-              From {letter.sender_name} — to {letter.receiver_name}
-            </p>
+      <div className="relative z-10 w-full max-w-5xl bg-[#F9F7F1] shadow-2xl p-6 md:p-12 border-t-8 border-double border-[#1A1A1A]">
+
+        {/* Masthead */}
+        <header className="border-b-4 border-[#1A1A1A] mb-8 pb-4 text-center">
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <div className="h-[1px] bg-[#1A1A1A] flex-grow" />
+            <span className="text-xs uppercase tracking-[0.3em] font-sans font-bold">EST. 2024</span>
+            <div className="h-[1px] bg-[#1A1A1A] flex-grow" />
           </div>
+          <h1 className="font-serif text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none transform scale-y-110 mb-4">
+            The Love Chronicle
+          </h1>
+          <div className="flex justify-between items-center border-t-2 border-b-2 border-[#1A1A1A] py-2 mt-4 text-xs md:text-sm font-sans font-bold uppercase tracking-wider">
+            <span>Vol. 14 • No. 02</span>
+            <span>{today}</span>
+            <span>Final Edition</span>
+          </div>
+        </header>
 
-          {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            {/* Left — photo or step description */}
-            <div className="md:col-span-4 md:text-right space-y-4">
-              {letter.photo_url ? (
-                <div className="relative w-full max-w-[280px] ml-auto aspect-square bg-[#FAFAFA] border border-gray-200 overflow-hidden">
-                  <div className="absolute top-3 left-3 w-2 h-2 border-l border-t border-gray-300" />
-                  <div className="absolute top-3 right-3 w-2 h-2 border-r border-t border-gray-300" />
-                  <div className="absolute bottom-3 left-3 w-2 h-2 border-l border-b border-gray-300" />
-                  <div className="absolute bottom-3 right-3 w-2 h-2 border-r border-b border-gray-300" />
-                  <img src={letter.photo_url} alt="Momento" className="w-full h-full object-cover" />
-                </div>
-              ) : (
-                <div>
-                  <span className="block text-[10px] uppercase tracking-[0.2em] text-[#CC7A6F] font-medium">Step 01</span>
-                  <h3 className="font-serif text-2xl text-[#1A1A1A]">The Question</h3>
-                  <p className="text-xs text-gray-400 font-light leading-relaxed mt-1">
-                    A sincere question deserves an honest answer.
-                  </p>
-                </div>
-              )}
-            </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
-            {/* Center — the question */}
-            <div className="md:col-span-4 flex flex-col items-center text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-              >
+          {/* Main Story Column */}
+          <article className="lg:col-span-8 flex flex-col gap-6">
+            {/* Headline */}
+            <div className="text-center lg:text-left mb-4">
+              <h2 className="font-serif text-4xl md:text-6xl font-black leading-[0.9] uppercase italic mb-4">
                 <QuestionDisplay
                   messageType={letter.message_type}
-                  className="font-serif text-3xl md:text-4xl font-light text-[#1A1A1A] leading-tight mb-8"
-                  accentClass="text-[#CC7A6F] italic"
+                  className=""
+                  accentClass="text-[#CC7A6F]"
                 />
-              </motion.div>
+              </h2>
+              <div className="w-full h-1 bg-[#1A1A1A] mb-2" />
+              <div className="flex justify-between font-sans text-xs font-bold uppercase tracking-wide text-gray-600">
+                <span className="flex items-center gap-1">
+                  <span className="block w-2 h-2 bg-[#CC7A6F] rounded-full" />
+                  Breaking News via {letter.sender_name}
+                </span>
+                <span>Read Time: Forever</span>
+              </div>
+            </div>
 
+            {/* Photo (if exists) - Newspaper Style */}
+            {letter.photo_url && (
+              <figure className="relative mb-6 grayscale hover:grayscale-0 transition-all duration-700">
+                <img
+                  src={letter.photo_url}
+                  alt="Evidence"
+                  className="w-full h-auto border border-[#1A1A1A] shadow-[4px_4px_0px_#1A1A1A]"
+                />
+                <figcaption className="text-[10px] font-sans font-bold uppercase tracking-wider mt-2 text-right text-gray-500">
+                  Fig 1. Irrefutable proof of happiness
+                </figcaption>
+              </figure>
+            )}
+
+            {/* Body Text - Multi-column */}
+            {letter.custom_content && (
+              <div className="columns-1 md:columns-2 gap-8 text-justify font-serif text-base md:text-lg leading-relaxed border-t border-b border-[#1A1A1A]/20 py-6">
+                <p className="first-letter:float-left first-letter:text-6xl first-letter:font-black first-letter:mr-3 first-letter:mt-[-8px] first-letter:font-serif">
+                  {letter.custom_content}
+                </p>
+                <p className="mt-4 indent-8">
+                  Experts agree that this level of affection is unprecedented. The sheer magnitude of feelings expressed in this document suggests a bond of historic proportions. Readers are advised to cherish this moment.
+                </p>
+              </div>
+            )}
+
+            <div className="flex justify-center mt-8">
               <LetterButtons letterId={letter.id} themeId="editorial" />
             </div>
+          </article>
 
-            {/* Right — custom content */}
-            <div className="md:col-span-4 space-y-6">
-              {letter.custom_content && (
-                <div>
-                  <span className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-2 font-medium">The Dedication</span>
-                  <p className="text-sm font-sans font-light text-gray-600 leading-relaxed">
-                    {letter.custom_content}
-                  </p>
-                  <p className="text-xs text-gray-400 mt-3 italic">— {letter.sender_name}</p>
-                </div>
-              )}
+          {/* Sidebar Column */}
+          <aside className="lg:col-span-4 flex flex-col gap-8 border-l border-[#1A1A1A] pl-0 lg:pl-8 pt-8 lg:pt-0">
+            {/* "AD" / Sidebar Item */}
+            <div className="border-2 border-[#1A1A1A] p-4 text-center">
+              <h3 className="font-sans font-black uppercase text-xl mb-2">Notice</h3>
+              <div className="w-12 h-1 bg-[#1A1A1A] mx-auto mb-4" />
+              <p className="font-serif italic text-sm mb-4">
+                "Love is not just looking at each other, it's looking in the same direction."
+              </p>
+              <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#CC7A6F]">
+                — Saint-Exupéry
+              </span>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="w-full py-8 text-center border-t border-gray-100 mt-auto">
-        <p className="font-serif italic text-gray-300 text-sm">&ldquo;Simplicity is the ultimate sophistication.&rdquo;</p>
-      </footer>
+            {/* Sender Stamp */}
+            <div className="text-center mt-auto">
+              <div className="inline-block border-4 border-double border-[#1A1A1A] rounded-full p-8 relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 bg-[#F9F7F1] px-2 text-[#CC7A6F] font-black font-sans uppercase text-xl whitespace-nowrap">
+                  Official
+                </div>
+                <p className="font-serif font-bold uppercase tracking-widest text-xs">
+                  Sent with Love<br />
+                  By {letter.sender_name}
+                </p>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+
+        {/* Footer */}
+        <footer className="w-full py-8 text-center border-t-4 border-[#1A1A1A] mt-12 flex flex-col items-center gap-2">
+          <div className="flex gap-4 text-2xl">✻ ✻ ✻</div>
+          <p className="font-serif italic text-gray-500 text-sm">
+            Printed in the heart, published for the soul.
+          </p>
+        </footer>
+      </div>
     </main>
   )
 }

@@ -182,7 +182,7 @@ export const THEMES: ThemeConfig[] = [
     },
     fonts: {
       heading: "font-serif",
-      body: "font-sans",
+      body: "font-serif",
       special: "font-serif italic",
     },
     wrapperClass: "theme-editorial",

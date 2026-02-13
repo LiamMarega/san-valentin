@@ -27,6 +27,7 @@ export function ThemedCelebration({ letter }: ThemedCelebrationProps) {
     scrapbook: ScrapbookCelebration,
     editorial: EditorialCelebration,
     midnight: MidnightCelebration,
+    romantic_pro: ClassicCelebration,
   }
 
   const Renderer = renderers[theme.id] ?? ClassicCelebration
@@ -271,49 +272,84 @@ function ScrapbookCelebration({ letter }: ThemedCelebrationProps) {
 }
 
 // =============================================================================
-// 3. EDITORIAL MINIMALISTA — Celebration
+// 3. EDITORIAL MINIMALISTA (NEWSPAPER STYLE) — Celebration
 // =============================================================================
 function EditorialCelebration({ letter }: ThemedCelebrationProps) {
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+
   return (
-    <main className="min-h-screen bg-white text-[#1A1A1A] font-sans antialiased flex flex-col">
-      {/* Nav */}
-      <nav className="w-full px-8 py-8 md:px-16 flex justify-between items-center border-b border-gray-100">
-        <span className="text-xs uppercase tracking-[0.2em] font-light text-gray-400">Valentine&apos;s Editorial</span>
-        <span className="text-xs uppercase tracking-[0.15em] text-[#CC7A6F]">Celebration</span>
-      </nav>
+    <main className="min-h-screen bg-[#F9F7F1] text-[#1A1A1A] font-serif antialiased flex flex-col items-center py-12 px-4 md:px-8">
+      {/* Texture overlay */}
+      <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')]" />
 
-      <div className="flex-grow flex flex-col items-center justify-center px-6 py-16">
-        <div className="w-full max-w-2xl text-center">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", delay: 0.2 }}
-            className="mb-8"
-          >
-            <Heart className="w-16 h-16 text-[#CC7A6F] mx-auto" fill="currentColor" />
-          </motion.div>
+      <div className="relative z-10 w-full max-w-3xl bg-[#F9F7F1] shadow-2xl p-6 md:p-12 border-t-8 border-double border-[#1A1A1A] text-center">
 
-          <h1 className="font-serif font-light text-5xl md:text-7xl tracking-tight text-[#1A1A1A] italic mb-6">
-            She Said Yes.
+        {/* Masthead */}
+        <header className="border-b-4 border-[#1A1A1A] mb-8 pb-4">
+          <h1 className="font-serif text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none transform scale-y-110 mb-2">
+            The Love Chronicle
           </h1>
+          <div className="flex justify-between items-center border-t-2 border-b-2 border-[#1A1A1A] py-2 mt-2 text-xs md:text-sm font-sans font-bold uppercase tracking-wider">
+            <span>Special Edition</span>
+            <span>{today}</span>
+            <span>Breaking News</span>
+          </div>
+        </header>
 
-          <p className="text-gray-400 text-lg font-light mb-4">
-            {letter.sender_name} va a estar muy feliz.
+        {/* Main Headline */}
+        <div className="mb-8">
+          <h2 className="font-serif text-6xl md:text-8xl font-black uppercase leading-[0.8] mb-4">
+            SHE SAID<br /><span className="italic text-[#CC7A6F]">YES!</span>
+          </h2>
+          <div className="w-full h-2 bg-[#1A1A1A] mb-1" />
+          <div className="w-full h-0.5 bg-[#1A1A1A]" />
+          <p className="mt-2 font-sans font-bold uppercase tracking-widest text-sm md:text-base">
+            Celebrations Erupt Worldwide • Experts Baffled by Levels of Joy
           </p>
+        </div>
 
-          {letter.photo_url && (
-            <div className="my-10 mx-auto max-w-[300px] aspect-square bg-[#FAFAFA] border border-gray-200 overflow-hidden">
-              <img src={letter.photo_url} alt="Celebration" className="w-full h-full object-cover" />
+        {/* Photo / Content */}
+        <div className="mb-8">
+          {letter.photo_url ? (
+            <figure className="relative grayscale hover:grayscale-0 transition-all duration-700">
+              <img
+                src={letter.photo_url}
+                alt="Celebration"
+                className="w-full h-auto border-4 border-[#1A1A1A]"
+              />
+              <figcaption className="text-xs font-sans font-bold uppercase tracking-wider mt-2 text-left italic">
+                Image: The happy couple spotted moments after the announcement.
+              </figcaption>
+            </figure>
+          ) : (
+            <div className="border-4 border-[#1A1A1A] p-8">
+              <Heart className="w-24 h-24 text-[#CC7A6F] mx-auto animate-pulse" fill="currentColor" />
+              <p className="mt-4 font-serif text-xl italic">
+                "{letter.sender_name} is reportedly 'over the moon' following the acceptance."
+              </p>
             </div>
           )}
-
-          <CreateOwnCTA textColor="text-gray-400" btnClass="bg-[#1A1A1A] text-white hover:bg-[#CC7A6F]" />
         </div>
-      </div>
 
-      <footer className="w-full py-8 text-center border-t border-gray-100 mt-auto">
-        <p className="font-serif italic text-gray-300 text-sm">&ldquo;Simplicity is the ultimate sophistication.&rdquo;</p>
-      </footer>
+        <p className="font-serif text-lg md:text-xl leading-relaxed mb-8 max-w-xl mx-auto">
+          In a developing story that has captured hearts everywhere, the proposal was accepted with enthusiasm. Sources close to <strong>{letter.sender_name}</strong> confirm that this is indeed the start of a beautiful chapter.
+        </p>
+
+        <CreateOwnCTA textColor="text-gray-500 font-sans font-bold uppercase tracking-widest" btnClass="bg-[#1A1A1A] text-[#F9F7F1] hover:bg-[#CC7A6F] hover:text-[#1A1A1A] transition-colors border-2 border-[#1A1A1A]" />
+
+        {/* Footer */}
+        <footer className="mt-12 pt-4 border-t-2 border-[#1A1A1A]">
+          <p className="font-serif italic text-xs">
+            Printed with love • The Love Chronicle Inc.
+          </p>
+        </footer>
+
+      </div>
     </main>
   )
 }
