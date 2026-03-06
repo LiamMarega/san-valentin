@@ -96,8 +96,75 @@ export default function Home() {
           <LetterForm />
         </div>
 
-        {/* Comparación Free vs Pro */}
+        {{/* NEW: Raspaditos Feature */}
         <section className="mt-20 mb-16">
+          <div className="max-w-3xl mx-auto">
+            <div className="relative bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 rounded-3xl p-8 md:p-10 border border-rose-100 overflow-hidden">
+              {/* Decorative background */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-10 right-10 w-24 h-24 bg-rose-200/30 rounded-full blur-2xl" />
+                <div className="absolute bottom-10 left-10 w-32 h-32 bg-pink-200/20 rounded-full blur-3xl" />
+              </div>
+
+              <div className="relative z-10">
+                {/* Badge */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="inline-flex items-center gap-1 bg-rose-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+                    <Sparkles className="w-3 h-3" />
+                    Nuevo
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col md:flex-row md:items-center gap-6">
+                  <div className="flex-1">
+                    <h2 className="font-serif text-2xl md:text-3xl font-semibold text-slate-800 mb-3 text-balance">
+                      Raspaditos de Amor
+                    </h2>
+                    <p className="text-slate-600 mb-4 text-pretty">
+                      Crea una tarjeta interactiva con un mensaje secreto. 
+                      Tu persona especial tendra que raspar para descubrir la sorpresa.
+                    </p>
+                    <ul className="space-y-2 text-sm text-slate-600 mb-6">
+                      <li className="flex items-center gap-2">
+                        <Heart className="w-4 h-4 text-rose-500" fill="currentColor" />
+                        Mensaje oculto personalizado
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-amber-500" />
+                        Temas exclusivos y animaciones
+                      </li>
+                    </ul>
+                    <Link
+                      href="/raspadito"
+                      className="inline-flex items-center gap-2 bg-rose-500 text-white font-semibold px-6 py-3 rounded-full hover:bg-rose-600 transition-all shadow-lg hover:shadow-xl"
+                    >
+                      <Heart className="w-4 h-4" />
+                      Crear raspadito
+                    </Link>
+                  </div>
+
+                  {/* Preview illustration */}
+                  <div className="flex-shrink-0 flex justify-center">
+                    <div className="relative w-40 h-52 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl shadow-xl overflow-hidden">
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2)_0%,transparent_70%)]" />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center p-4">
+                        <p className="text-xs font-medium opacity-80 mb-1">Raspa aqui</p>
+                        <p className="text-sm font-bold">Mensaje secreto</p>
+                        <div className="mt-3 w-12 h-12 rounded-full border-2 border-white/40 border-dashed flex items-center justify-center">
+                          <Heart className="w-5 h-5 opacity-60" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Comparación Free vs Pro */}
+        <section className="mt-16 mb-16">
           <h2 className="font-serif text-2xl md:text-3xl font-semibold text-center text-foreground mb-2">
             Hacé que tu carta sea inolvidable
           </h2>
