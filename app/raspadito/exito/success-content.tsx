@@ -13,11 +13,30 @@ interface SuccessContentProps {
   isPending?: boolean
 }
 
+// Generate confetti items with deterministic positions for SSR compatibility
+interface ConfettiItem {
+  id: number
+  left: number
+  duration: number
+  delay: number
+}
+
 export function SuccessContent({ scratchCard, shareUrl, isPending }: SuccessContentProps) {
   const [copied, setCopied] = useState(false)
-  const [showConfetti, setShowConfetti] = useState(true)
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [confettiItems, setConfettiItems] = useState<ConfettiItem[]>([])
 
   useEffect(() => {
+    // Generate random confetti positions only on client
+    const items = [...Array(30)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      duration: 2 + Math.random() * 2,
+      delay: Math.random() * 0.5,
+    }))
+    setConfettiItems(items)
+    setShowConfetti(true)
+    
     const timer = setTimeout(() => setShowConfetti(false), 3000)
     return () => clearTimeout(timer)
   }, [])
@@ -54,15 +73,15 @@ export function SuccessContent({ scratchCard, shareUrl, isPending }: SuccessCont
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 py-12 relative overflow-hidden">
       {/* Confetti animation */}
-      {showConfetti && (
+      {showConfetti && confettiItems.length > 0 && (
         <div className="fixed inset-0 pointer-events-none">
-          {[...Array(30)].map((_, i) => (
+          {confettiItems.map((item) => (
             <motion.div
-              key={i}
+              key={item.id}
               className="absolute w-3 h-3"
               initial={{
                 top: -20,
-                left: `${Math.random() * 100}%`,
+                left: `${item.left}%`,
                 rotate: 0,
               }}
               animate={{
@@ -70,14 +89,14 @@ export function SuccessContent({ scratchCard, shareUrl, isPending }: SuccessCont
                 rotate: 720,
               }}
               transition={{
-                duration: 2 + Math.random() * 2,
-                delay: Math.random() * 0.5,
+                duration: item.duration,
+                delay: item.delay,
                 ease: "linear",
               }}
             >
-              {i % 3 === 0 ? (
+              {item.id % 3 === 0 ? (
                 <Heart className="w-full h-full text-rose-400 fill-rose-400" />
-              ) : i % 3 === 1 ? (
+              ) : item.id % 3 === 1 ? (
                 <Sparkles className="w-full h-full text-amber-400" />
               ) : (
                 <div className="w-full h-full rounded-sm bg-pink-400" />
