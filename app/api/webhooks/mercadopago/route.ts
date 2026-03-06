@@ -110,7 +110,16 @@ async function processPayment(paymentId: string) {
     return
   }
 
-  const letterId = payment.external_reference
+  const externalRef = payment.external_reference
+
+  // Check if this is a scratch card payment
+  if (externalRef.startsWith("scratch_")) {
+    await processScratchCardPayment(externalRef.replace("scratch_", ""), paymentId, sql)
+    return
+  }
+
+  // Regular letter payment
+  const letterId = externalRef
 
   // 2. Actualizar DB
   console.log(`[processPayment] Updating DB for letter ${letterId}...`)
@@ -158,5 +167,42 @@ async function processPayment(paymentId: string) {
     }
   } catch (dbError) {
     console.error(`[processPayment] ❌ DB error:`, dbError)
+  }
+}
+
+// =============================================
+// Procesamiento de pago para Scratch Cards
+// =============================================
+async function processScratchCardPayment(
+  scratchCardId: string, 
+  paymentId: string, 
+  sql: typeof import("@/lib/db").sql
+) {
+  console.log(`[processScratchCardPayment] Processing scratch card ${scratchCardId}...`)
+  
+  try {
+    const updateResult = await sql`
+      UPDATE scratch_cards
+      SET payment_status = 'paid',
+          mp_payment_id = ${paymentId},
+          status = 'sent'
+      WHERE id = ${scratchCardId}
+        AND payment_status != 'paid'
+      RETURNING *
+    `
+
+    if (updateResult.length === 0) {
+      console.log(`[processScratchCardPayment] Scratch card ${scratchCardId} already processed or not found.`)
+      return
+    }
+
+    const scratchCard = updateResult[0]
+    console.log(`[processScratchCardPayment] Scratch card ${scratchCardId} updated in DB.`)
+
+    // TODO: Send email notification to receiver about the scratch card
+    // For now, scratch cards work via shareable link
+    console.log(`[processScratchCardPayment] ✅ Scratch card ${scratchCardId} ready to share`)
+  } catch (dbError) {
+    console.error(`[processScratchCardPayment] ❌ DB error:`, dbError)
   }
 }
