@@ -96,7 +96,7 @@ export default function Home() {
           <LetterForm />
         </div>
 
-        {{/* NEW: Raspaditos Feature */}
+        {/* NEW: Raspaditos Feature */}
         <section className="mt-20 mb-16">
           <div className="max-w-3xl mx-auto">
             <div className="relative bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 rounded-3xl p-8 md:p-10 border border-rose-100 overflow-hidden">
