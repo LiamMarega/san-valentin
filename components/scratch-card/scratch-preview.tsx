@@ -1,8 +1,15 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Heart } from "lucide-react"
+import { Heart, Crown } from "lucide-react"
 import { getScratchThemeById, type ScratchThemeId } from "@/constants/scratch-themes"
+
+// =============================================================================
+// Scratch Card Preview Component
+// =============================================================================
+// Shows a preview of how the scratch card will look, including premium chrome
+// effects and visual indicators for premium themes.
+// =============================================================================
 
 interface ScratchPreviewProps {
   theme: ScratchThemeId
@@ -20,6 +27,7 @@ export function ScratchPreview({
   size = "md",
 }: ScratchPreviewProps) {
   const themeConfig = getScratchThemeById(theme)
+  const isPremium = themeConfig.tier === "premium"
 
   const dimensions = {
     sm: { width: 160, height: 200 },
@@ -31,8 +39,14 @@ export function ScratchPreview({
 
   return (
     <div
-      className="relative rounded-2xl overflow-hidden shadow-xl"
-      style={{ width, height }}
+      className="relative rounded-2xl overflow-hidden"
+      style={{ 
+        width, 
+        height,
+        boxShadow: isPremium 
+          ? `0 10px 40px -10px ${themeConfig.colors.glow}50, 0 4px 6px -2px rgba(0, 0, 0, 0.1)`
+          : "0 10px 25px -10px rgba(0, 0, 0, 0.2)",
+      }}
     >
       {/* Background/message layer */}
       <div
@@ -66,26 +80,72 @@ export function ScratchPreview({
         </div>
       </div>
 
-      {/* Cover layer */}
+      {/* Cover layer with chrome effect for premium */}
       <motion.div
         className="absolute inset-0 flex flex-col items-center justify-center"
         initial={{ opacity: 1 }}
         style={{
-          background: `linear-gradient(135deg, ${themeConfig.colors.coverGradient[0]}, ${themeConfig.colors.coverGradient[1]})`,
+          background: isPremium && themeConfig.chrome.enabled
+            ? `linear-gradient(${themeConfig.chrome.angle}deg, 
+                ${themeConfig.chrome.highlights[0]}, 
+                ${themeConfig.chrome.highlights[1]} 30%, 
+                ${themeConfig.chrome.highlights[2]} 50%,
+                ${themeConfig.chrome.highlights[1]} 70%,
+                ${themeConfig.chrome.highlights[3]})`
+            : `linear-gradient(135deg, ${themeConfig.colors.coverGradient[0]}, ${themeConfig.colors.coverGradient[1]}, ${themeConfig.colors.coverGradient[2]})`,
         }}
       >
-        {/* Pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{ backgroundImage: themeConfig.coverPattern }}
+        {/* Shimmer effect for premium */}
+        {isPremium && themeConfig.chrome.shimmer && (
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(
+                105deg,
+                transparent 40%,
+                rgba(255, 255, 255, 0.3) 45%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0.3) 55%,
+                transparent 60%
+              )`,
+              backgroundSize: "200% 100%",
+            }}
+            animate={{
+              backgroundPosition: ["200% 0", "-200% 0"],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatDelay: 2,
+            }}
+          />
+        )}
+
+        {/* Subtle inner border for 3D effect */}
+        <div 
+          className="absolute inset-1 rounded-xl pointer-events-none"
+          style={{
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+          }}
         />
 
         {/* Content */}
         <div className="relative z-10 text-center px-4">
+          {/* Premium badge */}
+          {isPremium && (
+            <div className="flex items-center justify-center gap-1 mb-2">
+              <Crown className="w-3 h-3 text-white/80" />
+              <span className="text-white/80 text-[10px] font-bold uppercase tracking-wider">
+                Premium
+              </span>
+            </div>
+          )}
+          
           <p className="text-white font-medium text-xs mb-1 opacity-80">
             Para: {receiverName}
           </p>
-          <p className="text-white font-bold" style={{ fontSize: size === "sm" ? "0.875rem" : "1rem" }}>
+          <p className="text-white font-bold drop-shadow" style={{ fontSize: size === "sm" ? "0.875rem" : "1rem" }}>
             Tienes un mensaje secreto
           </p>
           <p className="text-white/70 text-xs mt-2">
@@ -105,11 +165,24 @@ export function ScratchPreview({
             repeat: Infinity,
           }}
         >
-          <div className="w-12 h-12 rounded-full border-2 border-white/40 border-dashed flex items-center justify-center">
+          <div 
+            className="w-12 h-12 rounded-full border-2 border-dashed flex items-center justify-center"
+            style={{ borderColor: "rgba(255, 255, 255, 0.4)" }}
+          >
             <Heart className="w-5 h-5 text-white/60" />
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Outer glow for premium */}
+      {isPremium && (
+        <div 
+          className="absolute inset-0 pointer-events-none rounded-2xl"
+          style={{
+            boxShadow: `inset 0 0 30px ${themeConfig.colors.glow}20`,
+          }}
+        />
+      )}
     </div>
   )
 }

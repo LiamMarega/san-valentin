@@ -15,7 +15,7 @@ import {
 import { ScratchThemeSelector } from "./theme-selector"
 import { ScratchPreview } from "./scratch-preview"
 import { createScratchCard } from "@/lib/scratch-actions"
-import { isScratchThemeLocked, type ScratchThemeId } from "@/constants/scratch-themes"
+import { isScratchThemeLocked, getScratchThemeById, type ScratchThemeId } from "@/constants/scratch-themes"
 import type { ScratchCardFormData } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -39,7 +39,7 @@ export function ScratchForm() {
   const [receiverEmail, setReceiverEmail] = useState("")
   const [hiddenMessage, setHiddenMessage] = useState("")
   const [revealMessage, setRevealMessage] = useState("")
-  const [selectedTheme, setSelectedTheme] = useState<ScratchThemeId>("corazones")
+  const [selectedTheme, setSelectedTheme] = useState<ScratchThemeId>("basico")
 
   function capitalizeFirstLetter(value: string): string {
     if (!value) return value
@@ -335,20 +335,23 @@ export function ScratchForm() {
                 >
                   <p className="text-sm font-semibold text-amber-800 flex items-center gap-2 mb-2">
                     <Sparkles className="w-4 h-4" />
-                    Que incluye el tema Premium?
+                    Tema Premium: {getScratchThemeById(selectedTheme).name}
                   </p>
-                  <ul className="text-xs text-amber-700 space-y-1">
+                  <ul className="text-xs text-amber-700 space-y-1.5">
                     <li className="flex items-center gap-2">
-                      <span className="text-green-600">OK</span> Diseno exclusivo y premium
+                      <span className="text-green-500">✓</span> Fondo animado dinamico
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-green-600">OK</span> Efectos especiales al raspar
+                      <span className="text-green-500">✓</span> Superficie cromada metalica
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-green-600">OK</span> Animaciones de celebracion
+                      <span className="text-green-500">✓</span> Efecto brillo al raspar
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-green-600">OK</span> Solo $2.99 USD
+                      <span className="text-green-500">✓</span> Vibracion tactil realista
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-green-500">✓</span> Animaciones de celebracion premium
                     </li>
                   </ul>
                 </motion.div>

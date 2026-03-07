@@ -1,191 +1,299 @@
 // =============================================================================
-// Scratch Card Theme Configuration
+// Scratch Card Theme Configuration - FREEMIUM MODEL
 // =============================================================================
-// Each theme defines the visual identity for scratch cards: colors, patterns,
-// and effects. Follows the same pattern as the letter themes.
+// Premium themes feature: dynamic backgrounds, SVG overlays, breathing effects,
+// and metallic chrome finishes. Free theme is clean and functional.
 // =============================================================================
 
 export type ScratchThemeId = 
-  | "corazones" 
-  | "estrellas" 
-  | "flores" 
-  | "galaxia" 
-  | "vintage" 
-  | "minimalista"
+  | "basico"           // FREE - Clean, simple
+  | "aurora"           // PREMIUM - Northern lights animation
+  | "galaxia"          // PREMIUM - Cosmic particles
+  | "rosas"            // PREMIUM - Floating rose petals
+  | "fuego"            // PREMIUM - Warm flame effect
+  | "diamante"         // PREMIUM - Luxury diamond sparkle
+
+export type ThemeTier = "free" | "premium"
 
 export interface ScratchThemeConfig {
   id: ScratchThemeId
   name: string
   description: string
-  isLocked: boolean
+  tier: ThemeTier
+  price: number // 0 for free
   preview: {
-    /** Tailwind background classes for theme card preview */
     cardBg: string
-    /** Accent color class */
     accent: string
+    gradient?: string
   }
   colors: {
-    /** Cover layer gradient colors */
-    coverGradient: [string, string]
-    /** Particle/confetti colors */
+    coverGradient: [string, string, string] // Three stops for chrome effect
     particles: string[]
-    /** Background color */
     background: string
-    /** Card background */
     card: string
-    /** Text color */
     text: string
-    /** Primary accent */
     primary: string
-    /** Secondary accent */
     secondary: string
+    glow: string // For breathing/glow effects
   }
-  /** Pattern SVG or CSS pattern for the scratch cover */
-  coverPattern: string
-  /** Brush texture style */
-  brushStyle: 'soft' | 'sparkle' | 'hearts'
+  // Premium features
+  animation?: {
+    type: "aurora" | "particles" | "petals" | "flames" | "sparkle" | "none"
+    speed: "slow" | "medium" | "fast"
+    intensity: number // 0-1
+  }
+  // Chrome/metallic scratch surface
+  chrome: {
+    enabled: boolean
+    highlights: [string, string, string, string] // Gradient stops for metallic look
+    angle: number // Gradient angle in degrees
+    shimmer: boolean // Animated shimmer effect
+  }
+  // SVG overlay pattern
+  svgOverlay?: string
+  // Scratch brush style
+  brushStyle: "soft" | "sparkle" | "hearts" | "stars"
+}
+
+// ---------------------------------------------------------------------------
+// Premium SVG Overlays - High-quality vector decorations
+// ---------------------------------------------------------------------------
+const SVG_OVERLAYS = {
+  ornate: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 5C25 5 5 25 5 50s20 45 45 45 45-20 45-45S75 5 50 5zm0 80c-19.3 0-35-15.7-35-35s15.7-35 35-35 35 15.7 35 35-15.7 35-35 35z" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="50" r="25" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></svg>`,
+  diamonds: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><path d="M30 5l8 25-8 25-8-25z" fill="rgba(255,255,255,0.06)"/><path d="M5 30l25-8 25 8-25 8z" fill="rgba(255,255,255,0.04)"/></svg>`,
+  hearts: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><path d="M30 50s-15-10-15-20c0-5 4-10 10-10 3 0 5 2 5 2s2-2 5-2c6 0 10 5 10 10 0 10-15 20-15 20z" fill="rgba(255,255,255,0.08)"/></svg>`,
+  stars: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><path d="M30 5l4 12h13l-10 8 4 12-11-8-11 8 4-12-10-8h13z" fill="rgba(255,255,255,0.07)"/></svg>`,
+  roses: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="8" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="28" r="6" fill="rgba(255,255,255,0.07)"/><circle cx="40" cy="52" r="6" fill="rgba(255,255,255,0.07)"/><circle cx="28" cy="40" r="6" fill="rgba(255,255,255,0.07)"/><circle cx="52" cy="40" r="6" fill="rgba(255,255,255,0.07)"/><circle cx="30" cy="30" r="5" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="30" r="5" fill="rgba(255,255,255,0.05)"/><circle cx="30" cy="50" r="5" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="50" r="5" fill="rgba(255,255,255,0.05)"/></svg>`,
 }
 
 // ---------------------------------------------------------------------------
 // Scratch Theme Definitions
 // ---------------------------------------------------------------------------
 export const SCRATCH_THEMES: ScratchThemeConfig[] = [
-  // 1. Corazones (Hearts) - Default free theme
+  // ===========================================================================
+  // FREE THEME - Clean, functional, but basic
+  // ===========================================================================
   {
-    id: "corazones",
-    name: "Corazones",
-    description: "Lluvia de corazones sobre un fondo rosa cálido",
-    isLocked: false,
+    id: "basico",
+    name: "Basico",
+    description: "Simple y elegante - perfecto para empezar",
+    tier: "free",
+    price: 0,
     preview: {
-      cardBg: "bg-gradient-to-br from-rose-400 to-pink-500",
-      accent: "text-rose-100",
-    },
-    colors: {
-      coverGradient: ["#FB7185", "#EC4899"],
-      particles: ["#FCA5A5", "#FECDD3", "#FFF1F2", "#FB7185"],
-      background: "#FFF1F2",
-      card: "#FFFFFF",
-      text: "#881337",
-      primary: "#E11D48",
-      secondary: "#FECDD3",
-    },
-    coverPattern: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 35c-2.5-2.5-6.5-2.5-9 0s-2.5 6.5 0 9c2.5 2.5 9 7 9 7s6.5-4.5 9-7c2.5-2.5 2.5-6.5 0-9s-6.5-2.5-9 0' fill='%23ffffff20' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-    brushStyle: 'hearts',
-  },
-
-  // 2. Estrellas (Stars)
-  {
-    id: "estrellas",
-    name: "Estrellas",
-    description: "Estrellas brillantes en un cielo dorado",
-    isLocked: false,
-    preview: {
-      cardBg: "bg-gradient-to-br from-amber-400 to-orange-500",
-      accent: "text-amber-100",
-    },
-    colors: {
-      coverGradient: ["#FBBF24", "#F97316"],
-      particles: ["#FEF3C7", "#FDE68A", "#FBBF24", "#FFFFFF"],
-      background: "#FFFBEB",
-      card: "#FFFFFF",
-      text: "#78350F",
-      primary: "#D97706",
-      secondary: "#FDE68A",
-    },
-    coverPattern: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5l3.09 9.51h10l-8.09 5.88 3.09 9.51L30 24l-8.09 5.9 3.09-9.51-8.09-5.88h10L30 5z' fill='%23ffffff25' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-    brushStyle: 'sparkle',
-  },
-
-  // 3. Flores (Flowers)
-  {
-    id: "flores",
-    name: "Flores",
-    description: "Jardín de flores en tonos lavanda y rosa",
-    isLocked: true,
-    preview: {
-      cardBg: "bg-gradient-to-br from-purple-400 to-pink-400",
-      accent: "text-purple-100",
-    },
-    colors: {
-      coverGradient: ["#A78BFA", "#F472B6"],
-      particles: ["#DDD6FE", "#FBCFE8", "#F5D0FE", "#FFFFFF"],
-      background: "#FAF5FF",
-      card: "#FFFFFF",
-      text: "#581C87",
-      primary: "#9333EA",
-      secondary: "#F5D0FE",
-    },
-    coverPattern: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='40' cy='40' r='8' fill='%23ffffff20'/%3E%3Ccircle cx='40' cy='25' r='6' fill='%23ffffff15'/%3E%3Ccircle cx='40' cy='55' r='6' fill='%23ffffff15'/%3E%3Ccircle cx='25' cy='40' r='6' fill='%23ffffff15'/%3E%3Ccircle cx='55' cy='40' r='6' fill='%23ffffff15'/%3E%3C/svg%3E")`,
-    brushStyle: 'soft',
-  },
-
-  // 4. Galaxia (Galaxy/Cosmic)
-  {
-    id: "galaxia",
-    name: "Galaxia",
-    description: "Amor cósmico entre estrellas y nebulosas",
-    isLocked: true,
-    preview: {
-      cardBg: "bg-gradient-to-br from-indigo-600 to-purple-800",
-      accent: "text-indigo-200",
-    },
-    colors: {
-      coverGradient: ["#4F46E5", "#7C3AED"],
-      particles: ["#C7D2FE", "#A5B4FC", "#818CF8", "#FFFFFF"],
-      background: "#1E1B4B",
-      card: "#312E81",
-      text: "#E0E7FF",
-      primary: "#818CF8",
-      secondary: "#4338CA",
-    },
-    coverPattern: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1.5' fill='%23ffffff40'/%3E%3Ccircle cx='80' cy='30' r='1' fill='%23ffffff30'/%3E%3Ccircle cx='50' cy='70' r='2' fill='%23ffffff50'/%3E%3Ccircle cx='30' cy='80' r='1' fill='%23ffffff25'/%3E%3Ccircle cx='70' cy='60' r='1.5' fill='%23ffffff35'/%3E%3Ccircle cx='10' cy='50' r='1' fill='%23ffffff20'/%3E%3Ccircle cx='90' cy='90' r='1.5' fill='%23ffffff30'/%3E%3C/svg%3E")`,
-    brushStyle: 'sparkle',
-  },
-
-  // 5. Vintage
-  {
-    id: "vintage",
-    name: "Vintage",
-    description: "Estilo clásico con tonos sepia y elegancia atemporal",
-    isLocked: true,
-    preview: {
-      cardBg: "bg-gradient-to-br from-amber-200 to-orange-300",
-      accent: "text-amber-800",
-    },
-    colors: {
-      coverGradient: ["#D4A574", "#C9956C"],
-      particles: ["#FEF3C7", "#F5E6D3", "#E8D5C4", "#FFFFFF"],
-      background: "#FEF7ED",
-      card: "#FFFBF5",
-      text: "#78350F",
-      primary: "#B45309",
-      secondary: "#FDE68A",
-    },
-    coverPattern: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0V0zm30 30v30h30V30H30zm0-30v30h30V0H30zM0 30v30h30V30H0zM0 0v30h30V0H0z' fill='none' stroke='%23ffffff10' stroke-width='1'/%3E%3C/svg%3E")`,
-    brushStyle: 'soft',
-  },
-
-  // 6. Minimalista
-  {
-    id: "minimalista",
-    name: "Minimalista",
-    description: "Diseño limpio y moderno con elegancia simple",
-    isLocked: false,
-    preview: {
-      cardBg: "bg-gradient-to-br from-slate-400 to-slate-600",
+      cardBg: "bg-gradient-to-br from-slate-400 to-slate-500",
       accent: "text-slate-100",
     },
     colors: {
-      coverGradient: ["#64748B", "#475569"],
+      coverGradient: ["#94A3B8", "#64748B", "#475569"],
       particles: ["#F1F5F9", "#E2E8F0", "#CBD5E1", "#FFFFFF"],
       background: "#F8FAFC",
       card: "#FFFFFF",
       text: "#1E293B",
       primary: "#475569",
       secondary: "#E2E8F0",
+      glow: "#94A3B8",
     },
-    coverPattern: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20h40M20 0v40' stroke='%23ffffff08' stroke-width='1' fill='none'/%3E%3C/svg%3E")`,
-    brushStyle: 'soft',
+    animation: {
+      type: "none",
+      speed: "slow",
+      intensity: 0,
+    },
+    chrome: {
+      enabled: false,
+      highlights: ["#CBD5E1", "#94A3B8", "#64748B", "#475569"],
+      angle: 135,
+      shimmer: false,
+    },
+    brushStyle: "soft",
+  },
+
+  // ===========================================================================
+  // PREMIUM THEMES - The "100x" Visual Improvement
+  // ===========================================================================
+
+  // Aurora Borealis - Flowing northern lights
+  {
+    id: "aurora",
+    name: "Aurora Boreal",
+    description: "Luces del norte danzando en el cielo artico",
+    tier: "premium",
+    price: 2.99,
+    preview: {
+      cardBg: "bg-gradient-to-br from-emerald-400 via-cyan-500 to-purple-600",
+      accent: "text-emerald-100",
+      gradient: "linear-gradient(135deg, #10B981, #06B6D4, #8B5CF6)",
+    },
+    colors: {
+      coverGradient: ["#10B981", "#06B6D4", "#8B5CF6"],
+      particles: ["#A7F3D0", "#67E8F9", "#C4B5FD", "#FFFFFF"],
+      background: "#0F172A",
+      card: "#1E293B",
+      text: "#F0FDF4",
+      primary: "#34D399",
+      secondary: "#164E63",
+      glow: "#06B6D4",
+    },
+    animation: {
+      type: "aurora",
+      speed: "slow",
+      intensity: 0.8,
+    },
+    chrome: {
+      enabled: true,
+      highlights: ["#FFFFFF", "#A7F3D0", "#06B6D4", "#8B5CF6"],
+      angle: 45,
+      shimmer: true,
+    },
+    svgOverlay: SVG_OVERLAYS.ornate,
+    brushStyle: "sparkle",
+  },
+
+  // Galaxia Cosmica - Space particles and nebulae
+  {
+    id: "galaxia",
+    name: "Galaxia Cosmica",
+    description: "Viaja por las estrellas y nebulosas del universo",
+    tier: "premium",
+    price: 2.99,
+    preview: {
+      cardBg: "bg-gradient-to-br from-indigo-600 via-purple-700 to-pink-600",
+      accent: "text-indigo-200",
+      gradient: "linear-gradient(135deg, #4F46E5, #7C3AED, #DB2777)",
+    },
+    colors: {
+      coverGradient: ["#4F46E5", "#7C3AED", "#DB2777"],
+      particles: ["#C7D2FE", "#DDD6FE", "#FBCFE8", "#FFFFFF"],
+      background: "#0C0A1D",
+      card: "#1E1B4B",
+      text: "#E0E7FF",
+      primary: "#A78BFA",
+      secondary: "#312E81",
+      glow: "#8B5CF6",
+    },
+    animation: {
+      type: "particles",
+      speed: "slow",
+      intensity: 0.9,
+    },
+    chrome: {
+      enabled: true,
+      highlights: ["#FFFFFF", "#C7D2FE", "#A78BFA", "#7C3AED"],
+      angle: 45,
+      shimmer: true,
+    },
+    svgOverlay: SVG_OVERLAYS.stars,
+    brushStyle: "sparkle",
+  },
+
+  // Rosas de Amor - Floating rose petals
+  {
+    id: "rosas",
+    name: "Rosas de Amor",
+    description: "Petalos de rosa cayendo en un jardin romantico",
+    tier: "premium",
+    price: 2.99,
+    preview: {
+      cardBg: "bg-gradient-to-br from-rose-400 via-pink-500 to-red-500",
+      accent: "text-rose-100",
+      gradient: "linear-gradient(135deg, #FB7185, #EC4899, #EF4444)",
+    },
+    colors: {
+      coverGradient: ["#FB7185", "#EC4899", "#EF4444"],
+      particles: ["#FECDD3", "#FBCFE8", "#FEE2E2", "#FFFFFF"],
+      background: "#FFF1F2",
+      card: "#FFFFFF",
+      text: "#881337",
+      primary: "#E11D48",
+      secondary: "#FCE7F3",
+      glow: "#F43F5E",
+    },
+    animation: {
+      type: "petals",
+      speed: "medium",
+      intensity: 0.7,
+    },
+    chrome: {
+      enabled: true,
+      highlights: ["#FFFFFF", "#FECDD3", "#FB7185", "#E11D48"],
+      angle: 45,
+      shimmer: true,
+    },
+    svgOverlay: SVG_OVERLAYS.roses,
+    brushStyle: "hearts",
+  },
+
+  // Fuego Pasion - Warm flame effect
+  {
+    id: "fuego",
+    name: "Fuego y Pasion",
+    description: "Llamas ardientes que representan el amor eterno",
+    tier: "premium",
+    price: 2.99,
+    preview: {
+      cardBg: "bg-gradient-to-br from-orange-500 via-red-500 to-yellow-500",
+      accent: "text-orange-100",
+      gradient: "linear-gradient(135deg, #F97316, #EF4444, #EAB308)",
+    },
+    colors: {
+      coverGradient: ["#F97316", "#EF4444", "#EAB308"],
+      particles: ["#FED7AA", "#FECACA", "#FEF08A", "#FFFFFF"],
+      background: "#1C1917",
+      card: "#292524",
+      text: "#FEF3C7",
+      primary: "#F97316",
+      secondary: "#44403C",
+      glow: "#EA580C",
+    },
+    animation: {
+      type: "flames",
+      speed: "medium",
+      intensity: 0.8,
+    },
+    chrome: {
+      enabled: true,
+      highlights: ["#FFFFFF", "#FED7AA", "#F97316", "#EA580C"],
+      angle: 45,
+      shimmer: true,
+    },
+    svgOverlay: SVG_OVERLAYS.diamonds,
+    brushStyle: "sparkle",
+  },
+
+  // Diamante Lujo - Luxury diamond sparkle
+  {
+    id: "diamante",
+    name: "Diamante de Lujo",
+    description: "Brillo y elegancia dignos de la realeza",
+    tier: "premium",
+    price: 2.99,
+    preview: {
+      cardBg: "bg-gradient-to-br from-slate-200 via-white to-slate-300",
+      accent: "text-slate-700",
+      gradient: "linear-gradient(135deg, #E2E8F0, #FFFFFF, #CBD5E1)",
+    },
+    colors: {
+      coverGradient: ["#E2E8F0", "#FFFFFF", "#CBD5E1"],
+      particles: ["#FFFFFF", "#F1F5F9", "#E2E8F0", "#94A3B8"],
+      background: "#0F172A",
+      card: "#1E293B",
+      text: "#F1F5F9",
+      primary: "#94A3B8",
+      secondary: "#334155",
+      glow: "#F1F5F9",
+    },
+    animation: {
+      type: "sparkle",
+      speed: "fast",
+      intensity: 1,
+    },
+    chrome: {
+      enabled: true,
+      highlights: ["#FFFFFF", "#F8FAFC", "#E2E8F0", "#94A3B8"],
+      angle: 45,
+      shimmer: true,
+    },
+    svgOverlay: SVG_OVERLAYS.diamonds,
+    brushStyle: "sparkle",
   },
 ]
 
@@ -197,13 +305,17 @@ export function getScratchThemeById(id: ScratchThemeId): ScratchThemeConfig {
 }
 
 export function isScratchThemeLocked(id: ScratchThemeId): boolean {
-  return getScratchThemeById(id).isLocked
+  return getScratchThemeById(id).tier === "premium"
 }
 
 export function getFreeScratchThemes(): ScratchThemeConfig[] {
-  return SCRATCH_THEMES.filter((t) => !t.isLocked)
+  return SCRATCH_THEMES.filter((t) => t.tier === "free")
 }
 
 export function getPremiumScratchThemes(): ScratchThemeConfig[] {
-  return SCRATCH_THEMES.filter((t) => t.isLocked)
+  return SCRATCH_THEMES.filter((t) => t.tier === "premium")
+}
+
+export function getScratchThemePrice(id: ScratchThemeId): number {
+  return getScratchThemeById(id).price
 }

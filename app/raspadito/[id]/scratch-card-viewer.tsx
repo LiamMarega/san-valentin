@@ -2,11 +2,18 @@
 
 import { useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Heart, Share2, Copy, Check } from "lucide-react"
-import { ScratchCanvas, RevealAnimation } from "@/components/scratch-card"
+import { Heart, Share2, Copy, Check, Crown } from "lucide-react"
+import { ScratchCanvas, RevealAnimation, AnimatedBackground } from "@/components/scratch-card"
 import { markAsScratched, updateScratchProgress } from "@/lib/scratch-actions"
 import { getScratchThemeById } from "@/constants/scratch-themes"
 import type { ScratchCard } from "@/lib/types"
+
+// =============================================================================
+// Scratch Card Viewer - Premium Experience
+// =============================================================================
+// Displays the full scratch card experience with animated backgrounds for
+// premium themes, haptic feedback, and celebration animations.
+// =============================================================================
 
 interface ScratchCardViewerProps {
   scratchCard: ScratchCard
@@ -18,6 +25,7 @@ export function ScratchCardViewer({ scratchCard }: ScratchCardViewerProps) {
   const [copied, setCopied] = useState(false)
 
   const themeConfig = getScratchThemeById(scratchCard.theme)
+  const isPremium = themeConfig.tier === "premium"
 
   const handleScratchProgress = useCallback(
     async (percentage: number) => {
@@ -58,21 +66,63 @@ export function ScratchCardViewer({ scratchCard }: ScratchCardViewerProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 py-12">
+    <div 
+      className="min-h-screen flex flex-col items-center justify-center p-4 py-12 relative overflow-hidden"
+      style={{
+        backgroundColor: isPremium ? themeConfig.colors.background : "#FFF1F2",
+      }}
+    >
+      {/* Animated background for premium themes */}
+      {isPremium && (
+        <div className="fixed inset-0 -z-10">
+          <AnimatedBackground theme={themeConfig} />
+        </div>
+      )}
+
+      {/* Simple decorative background for free themes */}
+      {!isPremium && (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-rose-200/30 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-pink-200/30 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-100/20 rounded-full blur-3xl" />
+        </div>
+      )}
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-8 relative z-10"
       >
-        <p className="text-rose-500 font-medium mb-2">
+        {/* Premium badge */}
+        {isPremium && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-3"
+          >
+            <Crown className="w-3.5 h-3.5" />
+            Raspadito Premium
+          </motion.div>
+        )}
+
+        <p 
+          className="font-medium mb-2"
+          style={{ color: isPremium ? themeConfig.colors.primary : "#F43F5E" }}
+        >
           De: {scratchCard.sender_name}
         </p>
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
+        <h1 
+          className="text-2xl sm:text-3xl font-bold mb-2"
+          style={{ color: isPremium ? themeConfig.colors.text : "#1E293B" }}
+        >
           {scratchCard.receiver_name}, tienes un mensaje secreto
         </h1>
         {!isRevealed && (
-          <p className="text-slate-500 text-sm">
+          <p 
+            className="text-sm"
+            style={{ color: isPremium ? `${themeConfig.colors.text}99` : "#64748B" }}
+          >
             Raspa la tarjeta para descubrir tu sorpresa
           </p>
         )}
@@ -83,7 +133,7 @@ export function ScratchCardViewer({ scratchCard }: ScratchCardViewerProps) {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2 }}
-        className="relative"
+        className="relative z-10"
       >
         <ScratchCanvas
           width={320}
@@ -153,16 +203,19 @@ export function ScratchCardViewer({ scratchCard }: ScratchCardViewerProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="mt-8 flex flex-col items-center gap-4"
+            className="mt-8 flex flex-col items-center gap-4 relative z-10"
           >
-            <p className="text-slate-600 text-sm text-center max-w-xs">
+            <p 
+              className="text-sm text-center max-w-xs"
+              style={{ color: isPremium ? `${themeConfig.colors.text}99` : "#64748B" }}
+            >
               Comparte este momento especial o crea tu propio raspadito
             </p>
 
             <div className="flex gap-3">
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-md text-slate-700 hover:bg-slate-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md text-slate-700 hover:bg-white transition-colors"
               >
                 {copied ? (
                   <>
@@ -171,7 +224,7 @@ export function ScratchCardViewer({ scratchCard }: ScratchCardViewerProps) {
                   </>
                 ) : (
                   <>
-                    {navigator.share ? (
+                    {typeof navigator !== "undefined" && navigator.share ? (
                       <Share2 className="w-4 h-4" />
                     ) : (
                       <Copy className="w-4 h-4" />
@@ -183,7 +236,11 @@ export function ScratchCardViewer({ scratchCard }: ScratchCardViewerProps) {
 
               <a
                 href="/raspadito"
-                className="flex items-center gap-2 px-4 py-2 bg-rose-500 text-white rounded-lg shadow-md hover:bg-rose-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg shadow-md transition-colors"
+                style={{
+                  backgroundColor: isPremium ? themeConfig.colors.primary : "#F43F5E",
+                  color: "#FFFFFF",
+                }}
               >
                 <Heart className="w-4 h-4" />
                 Crear el mio
@@ -198,18 +255,12 @@ export function ScratchCardViewer({ scratchCard }: ScratchCardViewerProps) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-6 text-slate-500 text-sm"
+          className="mt-6 text-sm relative z-10"
+          style={{ color: isPremium ? `${themeConfig.colors.text}99` : "#64748B" }}
         >
           Sigue raspando... {Math.round(scratchProgress)}% descubierto
         </motion.p>
       )}
-
-      {/* Decorative background elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-rose-200/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-pink-200/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-100/10 rounded-full blur-3xl" />
-      </div>
     </div>
   )
 }
